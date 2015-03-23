@@ -1,8 +1,8 @@
 package entities;
 
 import java.awt.Graphics2D;
-import java.util.List;
-import java.util.Map;
+
+import simulationEngine.ActorSet;
 
 public class ExpertPlayerShip extends PlayerShip {
 
@@ -13,12 +13,6 @@ public class ExpertPlayerShip extends PlayerShip {
 	}
 
 	@Override
-	public int act(Map<Integer, List<? extends Actor>> actors) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int getSlice() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -26,6 +20,12 @@ public class ExpertPlayerShip extends PlayerShip {
 
 	@Override
 	public int getType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int act(ActorSet actors) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

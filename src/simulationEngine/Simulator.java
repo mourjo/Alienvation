@@ -3,66 +3,97 @@ package simulationEngine;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JPanel;
 
 import entities.Actor;
-import entities.AlienShip;
+import entities.PlayerBullet;
 import entities.PlayerShip;
 
 public class Simulator extends JPanel {
 
 	private static final long serialVersionUID = -5555914128154149540L;
-	
 	private int score;
-
-	Map<Integer, Set<? extends Actor>> entities;
-	
+	ActorSet actors;
 	static Simulator _singleton = null;
+	ActorCreator actorFactory;
+	int canvasWidth, canvasHeight;
+	Random gen;
 	
-	
+	List<Point> stars;
+
 	private Simulator()
 	{
-		entities = new HashMap<Integer, Set<? extends Actor>>();
-		
-		entities.put(Actor.PLAYER_SHIP, new HashSet<PlayerShip>());
-		entities.put(Actor.ALIEN_SHIP, new HashSet<AlienShip>());
-		
+		actors = new ActorSet();
 		score = 0;
+		actorFactory = ActorCreator.getInstance();
+		gen = new Random();
+		
 	}
 	
-	public Simulator getInstance()
+	void setCanvasSize(int canvasWidth, int canvasHeight)
+	{
+		this.canvasWidth = canvasWidth;
+		this.canvasHeight = canvasHeight;
+		
+		stars = new ArrayList<Point>();
+		for (int i = 0; i < 100; i++)
+			stars.add(new Point(gen.nextInt(canvasWidth), gen.nextInt(canvasHeight)));
+	}
+
+	static public Simulator getInstance()
 	{
 		if(_singleton == null)
 			_singleton = new Simulator();
 		return _singleton; 
 	}
-	
+
 	public void simulate()
 	{
-		
-	}
-	
-	private void removeActor(Actor entity)
-	{
-	
+		actorFactory.createBasicPlayerShip(getPlayerShips());
 	}
 
-	public Set<? extends Actor> getPlayerShips()
+	private void removeActor(Actor actor)
 	{
-		return entities.get(Actor.PLAYER_SHIP);
+		if (actor.getType() == Actor.PLAYER_SHIP)
+			actors.getPlayerShips().remove(actor);
+		
+		else if (actor.getType() == Actor.ALIEN_SHIP)
+			actors.getAlienShips().remove(actor);
+		
+		else if (actor.getType() == Actor.PLAYER_BULLET)
+			actors.getPlayerBullets().remove(actor);
+		
+		else if (actor.getType() == Actor.ALIEN_BULLET)
+			actors.getPlayerShips().remove(actor);
 	}
-	
+
+	public Set<PlayerShip> getPlayerShips()
+	{
+		return actors.getPlayerShips();
+	}
+
+	public Set<PlayerBullet> getPlayerBullets()
+	{
+		return actors.getPlayerBullets();
+	}
+
 	public Set<? extends Actor> getAlienShips()
 	{
-		return entities.get(Actor.ALIEN_SHIP);
+		return actors.getAlienShips();
 	}
-	
+
+	public Set<? extends Actor> getAlienBullets()
+	{
+		return actors.getAlienBullets();
+	}
+
 	@Override
 	public void paint(Graphics g)
 	{
@@ -70,7 +101,15 @@ public class Simulator extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		this.setBackground(Color.BLACK);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(Color.GRAY);
+		for(int i = 0; i < stars.size(); i++)
+			g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 1, 1);
 		
+		for(PlayerShip a : actors.getPlayerShips())
+		{
+			a.paint(g2d);
+			a.act(actors);
+		}
 	}
 
 }

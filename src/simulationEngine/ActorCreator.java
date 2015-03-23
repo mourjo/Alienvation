@@ -5,6 +5,7 @@ import java.util.Set;
 import entities.Actor;
 import entities.BasicAlienShip;
 import entities.BasicPlayerShip;
+import entities.PlayerShip;
 
 public class ActorCreator {
 	
@@ -15,20 +16,19 @@ public class ActorCreator {
 		
 	}
 	
-	public ActorCreator getInstance()
+	static public ActorCreator getInstance()
 	{
 		if(_singleton == null)
-			return new ActorCreator();
-		else
-			return _singleton;
+			_singleton =  new ActorCreator();
+		return _singleton;
 	}
 	
-	public void createBasicPlayerShip(Set<Actor> basicPlayerShips)
+	public void createBasicPlayerShip(Set<? super BasicPlayerShip> basicPlayerShips)
 	{
 		basicPlayerShips.add(new BasicPlayerShip());
 	}
 	
-	public void createBasicAlienShip(Set<Actor> basicAlienShips)
+	public void createBasicAlienShip(Set<BasicAlienShip> basicAlienShips)
 	{
 		basicAlienShips.add(new BasicAlienShip());
 	}
