@@ -23,7 +23,7 @@ public class Simulator extends JPanel {
 	ActorSet actors;
 	static Simulator _singleton = null;
 	ActorCreator actorFactory;
-	int canvasWidth, canvasHeight;
+	public static int canvasWidth, canvasHeight;
 	Random gen;
 	
 	List<Point> stars;
@@ -37,10 +37,16 @@ public class Simulator extends JPanel {
 		
 	}
 	
-	void setCanvasSize(int canvasWidth, int canvasHeight)
+	void changeCanvasSize(int canvasWidth, int canvasHeight)
 	{
-		this.canvasWidth = canvasWidth;
-		this.canvasHeight = canvasHeight;
+		Simulator.canvasWidth = canvasWidth;
+		Simulator.canvasHeight = canvasHeight;
+	}
+	
+	void init(int canvasWidth, int canvasHeight)
+	{
+		Simulator.canvasWidth = canvasWidth;
+		Simulator.canvasHeight = canvasHeight;
 		
 		stars = new ArrayList<Point>();
 		for (int i = 0; i < 100; i++)
@@ -56,7 +62,9 @@ public class Simulator extends JPanel {
 
 	public void simulate()
 	{
+		for(int i = 0; i < 15; i++)
 		actorFactory.createBasicPlayerShip(getPlayerShips());
+		
 	}
 
 	private void removeActor(Actor actor)

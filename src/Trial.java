@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Trial extends JPanel {
-	int x = 0;
+	int x = 100;
 	int y = 0;
 	int starsX[];
 	int starsY[];

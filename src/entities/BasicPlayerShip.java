@@ -3,11 +3,13 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.Random;
 
 import simulationEngine.ActorSet;
+import simulationEngine.Simulator;
 
 public class BasicPlayerShip extends PlayerShip {
-	private int x, y;
+	private int sign = 1;
 
 	@Override
 	public void paint(Graphics2D g2d) {
@@ -16,8 +18,15 @@ public class BasicPlayerShip extends PlayerShip {
 //		for(int i = 0; i < starsX.length; i++)
 //			g2d.fillOval(starsX[i], starsY[i], 2, 2);
 		g2d.setColor(Color.RED);
-		g2d.fillOval(x, y, 30, 30);
+		g2d.fillRect(x, y, 40, 20);
 		
+	}
+	
+	public BasicPlayerShip()
+	{
+		super();
+		x = gen.nextInt(Simulator.canvasWidth);
+		y = gen.nextInt(Simulator.canvasHeight) + 1;
 	}
 
 	@Override
@@ -28,14 +37,15 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Actor.PLAYER_SHIP;
 	}
 
 	@Override
 	public int act(ActorSet actors) {
-		x += 1;
-		y += 1;
+		if(y+50 == Simulator.canvasHeight || y == 0)
+			sign = -sign;
+		y = y + sign;
+//		y = (y + 1) % Simulator.canvasHeight;
 		return 0;
 	}
 

@@ -12,7 +12,7 @@ public class Launcher extends JFrame {
 		simulator = Simulator.getInstance();
 		
 		this.setSize(960, 700);
-		simulator.setCanvasSize(this.getWidth(), this.getHeight());
+		simulator.init(this.getWidth(), this.getHeight());
 		this.setVisible(true);
 		this.add(simulator);
 		simulator.simulate();
