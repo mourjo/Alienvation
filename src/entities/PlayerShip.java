@@ -3,7 +3,6 @@ package entities;
 import java.awt.Graphics2D;
 
 public abstract class PlayerShip extends Ship {
-	protected final int TYPE = Actor.PLAYER_SHIP;
 
 	@Override
 	public void paintComponent(Graphics2D g) {
@@ -19,7 +18,7 @@ public abstract class PlayerShip extends Ship {
 	
 	@Override
 	public int getType() {
-		return TYPE;
+		return Actor.PLAYER_SHIP;
 	}
 
 }

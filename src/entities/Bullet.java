@@ -1,7 +1,6 @@
 package entities;
 
 import java.awt.Point;
-import java.util.Set;
 
 import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
@@ -14,20 +13,15 @@ public abstract class Bullet implements Actor{
 		return new Point(x,y);
 	}
 
-	public void validate(ActorSet actors)
+	public void cleanUp(ActorSet actors)
 	{
-		if(this.getType() == Actor.PLAYER_BULLET)
+		if(x < 0 || y < 0 || x > Simulator.canvasWidth || y > Simulator.canvasHeight)
 		{
-			if(x < 0 || y < 0 || x > Simulator.canvasWidth || y > Simulator.canvasHeight)
-			{
-				Set<PlayerBullet> set = actors.getPlayerBullets();
-				synchronized(set)
-				{
+			if(this.getType() == Actor.PLAYER_BULLET)
+				actors.getPlayerBullets().remove(this);
 
-					set.remove(this);
-					Thread.yield();
-				}
-			}
+			if(this.getType() == Actor.ALIEN_BULLET)
+				actors.getAlienBullets().remove(this);
 		}
 	}
 }

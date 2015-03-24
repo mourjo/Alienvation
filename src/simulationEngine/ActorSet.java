@@ -1,7 +1,8 @@
 package simulationEngine;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import entities.AlienBullet;
 import entities.AlienShip;
@@ -12,53 +13,54 @@ import entities.Ship;
 
 public class ActorSet {
 
-	private Set<PlayerShip> playerShips;
-	private Set<AlienShip> alienShips;
+	private List<PlayerShip> playerShips;
+	private List<AlienShip> alienShips;
 	
-	private Set<PlayerBullet> playerBullets;
-	private Set<AlienBullet> alienBullets;
+	private List<PlayerBullet> playerBullets;
+	private List<AlienBullet> alienBullets;
 	
 	ActorSet()
 	{
-		playerShips = new HashSet<PlayerShip>();
-		alienShips = new HashSet<AlienShip>();
+		playerShips = new CopyOnWriteArrayList<PlayerShip>(new ArrayList<PlayerShip>());
 
-		playerBullets = new HashSet<PlayerBullet>();
-		alienBullets = new HashSet<AlienBullet>();
+		alienShips = new CopyOnWriteArrayList<AlienShip>(new ArrayList<AlienShip>());
+
+		playerBullets = new CopyOnWriteArrayList<PlayerBullet>(new ArrayList<PlayerBullet>());
+		alienBullets = new CopyOnWriteArrayList<AlienBullet>(new ArrayList<AlienBullet>());
 	}
 	
-	public Set<Ship> getShips()
+	public List<Ship> getShips()
 	{
-		Set<Ship> allShips = new HashSet<Ship>();
+		List<Ship> allShips = new CopyOnWriteArrayList<Ship>(new ArrayList<Ship>());
 		allShips.addAll(playerShips);
 		allShips.addAll(alienShips);
 		return  allShips;
 	}
 	
-	public Set<Bullet> getBullets()
+	public List<Bullet> getBullets()
 	{
-		Set<Bullet> allBullets = new HashSet<Bullet>();
+		List<Bullet> allBullets = new CopyOnWriteArrayList<Bullet>(new ArrayList<Bullet>());
 		allBullets.addAll(playerBullets);
 		allBullets.addAll(alienBullets);
 		return  allBullets;
 	}
 	
-	public Set<PlayerShip> getPlayerShips()
+	public List<PlayerShip> getPlayerShips()
 	{
 		return playerShips;
 	}
 	
-	public Set<AlienShip> getAlienShips()
+	public List<AlienShip> getAlienShips()
 	{
 		return alienShips;
 	}
 	
-	public Set<PlayerBullet> getPlayerBullets()
+	public List<PlayerBullet> getPlayerBullets()
 	{
 		return playerBullets;
 	}
 	
-	public Set<AlienBullet> getAlienBullets()
+	public List<AlienBullet> getAlienBullets()
 	{
 		return alienBullets;
 	}

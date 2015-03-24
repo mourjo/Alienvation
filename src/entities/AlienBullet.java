@@ -1,14 +1,21 @@
 package entities;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import simulationEngine.ActorSet;
 
 public class AlienBullet extends Bullet {
 
+	public AlienBullet(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	@Override
 	public void paintComponent(Graphics2D g) {
-		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+		g.fillRect(x, y, 6, 3);
 
 	}
 
@@ -26,7 +33,8 @@ public class AlienBullet extends Bullet {
 
 	@Override
 	public int act(ActorSet actors) {
-		// TODO Auto-generated method stub
+		x--;
+		cleanUp(actors);
 		return 0;
 	}
 

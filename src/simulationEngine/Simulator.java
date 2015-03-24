@@ -8,12 +8,12 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
 import entities.Actor;
 import entities.AlienBullet;
+import entities.AlienShip;
 import entities.PlayerBullet;
 import entities.PlayerShip;
 
@@ -63,8 +63,11 @@ public class Simulator extends JPanel {
 
 	public void simulate()
 	{
-		for(int i = 0; i < 15; i++)
-		actorFactory.createBasicPlayerShip(getPlayerShips());
+		for(int i = 0; i < 10; i++)
+		{
+			actorFactory.createBasicAlienShip(getAlienShips());
+			actorFactory.createBasicPlayerShip(getPlayerShips());
+		}
 		
 	}
 
@@ -83,26 +86,27 @@ public class Simulator extends JPanel {
 			actors.getPlayerShips().remove(actor);
 	}
 
-	public Set<PlayerShip> getPlayerShips()
+	public List<PlayerShip> getPlayerShips()
 	{
 		return actors.getPlayerShips();
 	}
 
-	public Set<PlayerBullet> getPlayerBullets()
+	public List<PlayerBullet> getPlayerBullets()
 	{
 		return actors.getPlayerBullets();
 	}
 
-	public Set<? extends Actor> getAlienShips()
+	public List<AlienShip> getAlienShips()
 	{
 		return actors.getAlienShips();
 	}
 
-	public Set<? extends Actor> getAlienBullets()
+	public List<AlienBullet> getAlienBullets()
 	{
 		return actors.getAlienBullets();
 	}
 	
+	@Deprecated
 	public void cleanUp()
 	{
 		List<PlayerBullet> outOfScreenPlayerBullets = new ArrayList<PlayerBullet>();
@@ -134,6 +138,7 @@ public class Simulator extends JPanel {
 		this.setBackground(Color.BLACK);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.GRAY);
+		
 		for(int i = 0; i < stars.size(); i++)
 			g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 		
@@ -143,17 +148,23 @@ public class Simulator extends JPanel {
 			a.act(actors);
 		}
 		
-		synchronized(actors.getPlayerBullets())
+		for(PlayerBullet a : actors.getPlayerBullets())
 		{
-			for(PlayerBullet a : actors.getPlayerBullets())
-			{
-				a.paintComponent(g2d);
-				a.act(actors);
-			}
+			a.paintComponent(g2d);
+			a.act(actors);
 		}
 		
-		cleanUp();
-//		System.out.println(actors.getPlayerBullets().size());
+		for(AlienShip a : actors.getAlienShips())
+		{
+			a.paintComponent(g2d);
+			a.act(actors);
+		}
+		
+		for(AlienBullet a : actors.getAlienBullets())
+		{
+			a.paintComponent(g2d);
+			a.act(actors);
+		}
 	}
 
 }

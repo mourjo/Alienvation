@@ -16,7 +16,6 @@ public class PlayerBullet extends Bullet {
 
 	@Override
 	public void paintComponent(Graphics2D g) {
-		// TODO Auto-generated method stub
 		g.setColor(Color.WHITE);
 		g.fillRect(x, y, 6, 3);
 
@@ -37,7 +36,7 @@ public class PlayerBullet extends Bullet {
 	public int act(ActorSet actors) {
 		// TODO Auto-generated method stub
 		x++;
-//		validate(actors);
+		cleanUp(actors);
 		return 0;
 	}
 
