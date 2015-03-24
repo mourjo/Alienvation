@@ -3,6 +3,7 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,9 @@ public class BasicPlayerShip extends PlayerShip {
 		g2d.setColor(Color.RED);
 //		g2d.fillRect(x, y, 40, 20);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.drawImage(image, x, y, 60, 30, null);
+		
+		g2d.drawImage(image, x, y, null);
+//		g2d.drawImage(image, x, y, 60, 30, null);
 		
 	}
 	
@@ -38,7 +41,7 @@ public class BasicPlayerShip extends PlayerShip {
 		
 		if(image == null)
 			try {
-				image = ImageIO.read(new File("img/alienShip1.png"));
+				image = ImageIO.read(new File("img/alienShip3.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
