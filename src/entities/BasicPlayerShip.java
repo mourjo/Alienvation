@@ -3,13 +3,19 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
 
 public class BasicPlayerShip extends PlayerShip {
 	private int sign = 1;
+	static BufferedImage image = null;
 
 	@Override
 	public void paint(Graphics2D g2d) {
@@ -18,7 +24,9 @@ public class BasicPlayerShip extends PlayerShip {
 //		for(int i = 0; i < starsX.length; i++)
 //			g2d.fillOval(starsX[i], starsY[i], 2, 2);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(x, y, 40, 20);
+//		g2d.fillRect(x, y, 40, 20);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.drawImage(image, x, y, 60, 30, null);
 		
 	}
 	
@@ -27,6 +35,14 @@ public class BasicPlayerShip extends PlayerShip {
 		super();
 		x = gen.nextInt(Simulator.canvasWidth);
 		y = gen.nextInt(Simulator.canvasHeight) + 1;
+		
+		if(image == null)
+			try {
+				image = ImageIO.read(new File("img/alienShip1.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	@Override
