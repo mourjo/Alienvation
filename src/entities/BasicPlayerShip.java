@@ -65,6 +65,8 @@ public class BasicPlayerShip extends PlayerShip {
 			sign = -sign;
 		y = y + sign;
 //		y = (y + 1) % Simulator.canvasHeight;
+		if(gen.nextInt(1000) <= 5)
+			actors.getPlayerBullets().add(new PlayerBullet(x+40,y));
 		return 0;
 	}
 

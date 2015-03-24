@@ -118,6 +118,12 @@ public class Simulator extends JPanel {
 			a.paint(g2d);
 			a.act(actors);
 		}
+		
+		for(PlayerBullet a : actors.getPlayerBullets())
+		{
+			a.paint(g2d);
+			a.act(actors);
+		}
 	}
 
 }

@@ -27,7 +27,7 @@ public class ActorSet {
 		alienBullets = new HashSet<AlienBullet>();
 	}
 	
-	Set<Ship> getShips()
+	public Set<Ship> getShips()
 	{
 		Set<Ship> allShips = new HashSet<Ship>();
 		allShips.addAll(playerShips);
@@ -35,7 +35,7 @@ public class ActorSet {
 		return  allShips;
 	}
 	
-	Set<Bullet> getBullets()
+	public Set<Bullet> getBullets()
 	{
 		Set<Bullet> allBullets = new HashSet<Bullet>();
 		allBullets.addAll(playerBullets);
@@ -43,22 +43,22 @@ public class ActorSet {
 		return  allBullets;
 	}
 	
-	Set<PlayerShip> getPlayerShips()
+	public Set<PlayerShip> getPlayerShips()
 	{
 		return playerShips;
 	}
 	
-	Set<AlienShip> getAlienShips()
+	public Set<AlienShip> getAlienShips()
 	{
 		return alienShips;
 	}
 	
-	Set<PlayerBullet> getPlayerBullets()
+	public Set<PlayerBullet> getPlayerBullets()
 	{
 		return playerBullets;
 	}
 	
-	Set<AlienBullet> getAlienBullets()
+	public Set<AlienBullet> getAlienBullets()
 	{
 		return alienBullets;
 	}
