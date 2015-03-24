@@ -16,10 +16,13 @@ import simulationEngine.Simulator;
 
 public class BasicPlayerShip extends PlayerShip {
 	private int sign = 1;
-	static BufferedImage image = null;
+	static BufferedImage image1 = null;
+	static BufferedImage image2 = null;
+	BufferedImage image;
+	int interval;
 
 	@Override
-	public void paint(Graphics2D g2d) {
+	public void paintComponent(Graphics2D g2d) {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.WHITE);
 //		for(int i = 0; i < starsX.length; i++)
@@ -28,6 +31,11 @@ public class BasicPlayerShip extends PlayerShip {
 //		g2d.fillRect(x, y, 40, 20);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		
+		if(interval-- == 0)
+		{
+			image = image == image1 ? image2 : image1;
+			interval = gen.nextInt(30) + 50;
+		}
 		g2d.drawImage(image, x, y, null);
 //		g2d.drawImage(image, x, y, 60, 30, null);
 		
@@ -38,10 +46,13 @@ public class BasicPlayerShip extends PlayerShip {
 		super();
 		x = gen.nextInt(Simulator.canvasWidth);
 		y = gen.nextInt(Simulator.canvasHeight) + 1;
+		image = image1;
+		interval = gen.nextInt(30) + 50;
 		
-		if(image == null)
+		if(image1 == null)
 			try {
-				image = ImageIO.read(new File("img/alienShip3.png"));
+				image1 = ImageIO.read(new File("img/alienShip3.png"));
+				image2 = ImageIO.read(new File("img/alienShip4.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

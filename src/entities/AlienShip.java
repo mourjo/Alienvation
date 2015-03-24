@@ -6,7 +6,7 @@ public abstract class AlienShip extends Ship {
 	protected final int TYPE = Actor.ALIEN_SHIP;
 
 	@Override
-	public void paint(Graphics2D g) {
+	public void paintComponent(Graphics2D g) {
 		// TODO Auto-generated method stub
 
 	}

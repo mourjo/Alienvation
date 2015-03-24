@@ -12,7 +12,7 @@ public interface Actor {
 	final static Integer PLAYER_BULLET = 400;
 	final static Integer ALIEN_BULLET = 600;
 	
-	void paint(Graphics2D g);
+	void paintComponent(Graphics2D g);
 	
 	int act(ActorSet actors);
 	

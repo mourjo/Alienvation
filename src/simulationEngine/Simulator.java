@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import entities.Actor;
+import entities.AlienBullet;
 import entities.PlayerBullet;
 import entities.PlayerShip;
 
@@ -101,29 +102,58 @@ public class Simulator extends JPanel {
 	{
 		return actors.getAlienBullets();
 	}
+	
+	public void cleanUp()
+	{
+		List<PlayerBullet> outOfScreenPlayerBullets = new ArrayList<PlayerBullet>();
+		for(PlayerBullet b : actors.getPlayerBullets())
+		{
+			Point position = b.getPosition();
+			if(position.getX() < 0 || position.getY() < 0)
+				outOfScreenPlayerBullets.add(b);
+			if(position.getX() > canvasWidth || position.getY() > canvasHeight)
+				outOfScreenPlayerBullets.add(b);
+		}
+		actors.getPlayerBullets().removeAll(outOfScreenPlayerBullets);
+		
+		List<AlienBullet> outOfScreenAlienBullets = new ArrayList<AlienBullet>();
+		for(AlienBullet b : actors.getAlienBullets())
+		{
+			Point position = b.getPosition();
+			if(position.getX() < 0 || position.getY() < 0)
+				outOfScreenAlienBullets.add(b);
+		}
+		actors.getAlienBullets().removeAll(outOfScreenAlienBullets);
+	}
 
 	@Override
-	public void paint(Graphics g)
+	public void paintComponent(Graphics g)
 	{
-		super.paint(g);
+		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		this.setBackground(Color.BLACK);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.GRAY);
 		for(int i = 0; i < stars.size(); i++)
-			g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 1, 1);
+			g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 		
 		for(PlayerShip a : actors.getPlayerShips())
 		{
-			a.paint(g2d);
+			a.paintComponent(g2d);
 			a.act(actors);
 		}
 		
-		for(PlayerBullet a : actors.getPlayerBullets())
+		synchronized(actors.getPlayerBullets())
 		{
-			a.paint(g2d);
-			a.act(actors);
+			for(PlayerBullet a : actors.getPlayerBullets())
+			{
+				a.paintComponent(g2d);
+				a.act(actors);
+			}
 		}
+		
+		cleanUp();
+//		System.out.println(actors.getPlayerBullets().size());
 	}
 
 }

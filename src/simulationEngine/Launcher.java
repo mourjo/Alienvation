@@ -23,6 +23,7 @@ public class Launcher extends JFrame {
 	{
 		while(true)
 		{
+			Thread.yield();
 			Thread.sleep(10);
 			simulator.repaint();
 		}

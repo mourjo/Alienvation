@@ -7,7 +7,7 @@ import simulationEngine.ActorSet;
 public class MediumPlayerShip extends PlayerShip {
 
 	@Override
-	public void paint(Graphics2D g) {
+	public void paintComponent(Graphics2D g) {
 		// TODO Auto-generated method stub
 
 	}

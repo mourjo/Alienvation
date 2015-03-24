@@ -2,10 +2,8 @@ package simulationEngine;
 
 import java.util.Set;
 
-import entities.Actor;
 import entities.BasicAlienShip;
 import entities.BasicPlayerShip;
-import entities.PlayerShip;
 
 public class ActorCreator {
 	
