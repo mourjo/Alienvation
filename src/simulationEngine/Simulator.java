@@ -148,13 +148,13 @@ public class Simulator extends JPanel {
 			a.act(actors);
 		}
 		
-		for(PlayerBullet a : actors.getPlayerBullets())
+		for(AlienShip a : actors.getAlienShips())
 		{
 			a.paintComponent(g2d);
 			a.act(actors);
 		}
 		
-		for(AlienShip a : actors.getAlienShips())
+		for(PlayerBullet a : actors.getPlayerBullets())
 		{
 			a.paintComponent(g2d);
 			a.act(actors);
