@@ -27,8 +27,7 @@ public class AlienBullet extends Bullet {
 
 	@Override
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Actor.ALIEN_BULLET;
 	}
 
 	@Override

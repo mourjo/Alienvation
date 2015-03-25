@@ -6,8 +6,9 @@ import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
 
 public abstract class Bullet implements Actor{
-	int power;
+	protected int power;
 	protected int x, y;
+	
 	public Point getPosition()
 	{
 		return new Point(x,y);
@@ -23,5 +24,10 @@ public abstract class Bullet implements Actor{
 			if(this.getType() == Actor.ALIEN_BULLET)
 				actors.getAlienBullets().remove(this);
 		}
+	}
+	
+	public int getPower()
+	{
+		return power;
 	}
 }
