@@ -5,9 +5,8 @@ import java.awt.Point;
 import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
 
-public abstract class Bullet implements Actor{
+public abstract class Bullet extends Actor{
 	protected int power;
-	protected int x, y;
 	
 	public Point getPosition()
 	{
@@ -30,4 +29,6 @@ public abstract class Bullet implements Actor{
 	{
 		return power;
 	}
+	
+	
 }

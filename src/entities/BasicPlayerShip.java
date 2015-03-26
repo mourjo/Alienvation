@@ -11,7 +11,6 @@ import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
 
 public class BasicPlayerShip extends PlayerShip {
-	private int sign = 1;
 	static BufferedImage image1 = null;
 	
 	public BasicPlayerShip()
@@ -19,6 +18,21 @@ public class BasicPlayerShip extends PlayerShip {
 		super();
 		x = gen.nextInt(Simulator.canvasWidth);
 		y = gen.nextInt(Simulator.canvasHeight) + 1;
+		
+		if(image1 == null)
+			try {
+				image1 = ImageIO.read(new File("img/playerShip3.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public BasicPlayerShip(int x, int y)
+	{
+		super();
+		this.x = x;
+		this.y = y;
 		
 		if(image1 == null)
 			try {
@@ -46,8 +60,8 @@ public class BasicPlayerShip extends PlayerShip {
 	@Override
 	public int act(ActorSet actors) {
 		if(y+50 == Simulator.canvasHeight || y == 0)
-			sign = -sign;
-		y = y + sign;
+			speedY = -speedY;
+		y = y + speedY;
 
 		if(gen.nextInt(1000) <= 5)
 			actors.getPlayerBullets().add(new PlayerBullet(x+40,y));

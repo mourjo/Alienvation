@@ -63,11 +63,8 @@ public class Simulator extends JPanel {
 
 	public void simulate()
 	{
-		for(int i = 0; i < 10; i++)
-		{
-			actorFactory.createBasicAlienShip(getAlienShips());
-			actorFactory.createBasicPlayerShip(getPlayerShips());
-		}
+		actorFactory.createBasicAlienShip(getAlienShips(), 10);
+		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);
 		
 	}
 

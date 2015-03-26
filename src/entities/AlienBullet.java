@@ -6,10 +6,16 @@ import java.awt.Graphics2D;
 import simulationEngine.ActorSet;
 
 public class AlienBullet extends Bullet {
-
+	int speed;
 	public AlienBullet(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public AlienBullet(int x, int y, int speed) {
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
 	}
 
 	@Override
@@ -32,7 +38,7 @@ public class AlienBullet extends Bullet {
 
 	@Override
 	public int act(ActorSet actors) {
-		x--;
+		x -= speed;
 		cleanUp(actors);
 		return 0;
 	}

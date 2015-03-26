@@ -1,6 +1,7 @@
 package simulationEngine;
 
 import java.util.List;
+import java.util.Random;
 
 import entities.BasicAlienShip;
 import entities.BasicPlayerShip;
@@ -8,10 +9,11 @@ import entities.BasicPlayerShip;
 public class ActorCreator {
 	
 	static ActorCreator _singleton = null;
+	Random gen;
 
 	private ActorCreator()
 	{
-		
+		gen = new Random();
 	}
 	
 	static public ActorCreator getInstance()
@@ -21,13 +23,15 @@ public class ActorCreator {
 		return _singleton;
 	}
 	
-	public void createBasicPlayerShip(List<? super BasicPlayerShip> basicPlayerShips)
+	public void createBasicPlayerShip(List<? super BasicPlayerShip> basicPlayerShips, int count)
 	{
-		basicPlayerShips.add(new BasicPlayerShip());
+		for(int i = 0; i < count; i++)
+			basicPlayerShips.add(new BasicPlayerShip());
 	}
 	
-	public void createBasicAlienShip(List<? super BasicAlienShip> basicAlienShips)
+	public void createBasicAlienShip(List<? super BasicAlienShip> basicAlienShips, int count)
 	{
-		basicAlienShips.add(new BasicAlienShip());
+		for(int i = 30; i < Simulator.canvasHeight - 50; i += (Simulator.canvasHeight - 30 )/count)
+			basicAlienShips.add(new BasicAlienShip(Simulator.canvasWidth, i - gen.nextInt(40)));
 	}
 }
