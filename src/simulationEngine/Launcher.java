@@ -4,10 +4,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
@@ -25,7 +23,6 @@ public class Launcher extends JFrame {
 		simulator.init(this.getWidth(), this.getHeight());
 		this.setVisible(true);
 		this.add(simulator);
-		simulator.simulate();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		addKeyListener(new KeyAdapter(){
@@ -47,7 +44,8 @@ public class Launcher extends JFrame {
 			public void componentResized(ComponentEvent ev) {
 				Component c = (Component)ev.getSource();
 				Dimension x = c.getSize();
-				Simulator.setSizes(x.getWidth(), x.getHeight());
+				simulator.setSize(x);
+//				setSize(x.getWidth(), x.getHeight());
 				
 				//simulator.setSize(x);
 			}

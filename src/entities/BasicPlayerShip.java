@@ -16,8 +16,8 @@ public class BasicPlayerShip extends PlayerShip {
 	public BasicPlayerShip()
 	{
 		super();
-		x = gen.nextInt(Simulator.canvasWidth);
-		y = gen.nextInt(Simulator.canvasHeight) + 1;
+		x = gen.nextInt(Simulator.getInstance().getWidth());
+		y = gen.nextInt(Simulator.getInstance().getHeight()) + 1;
 		
 		if(image1 == null)
 			try {
@@ -59,7 +59,7 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
-		if(y+50 >= Simulator.canvasHeight || y <= 0)
+		if(y + 45 >= Simulator.getInstance().getHeight() || y <= 0)
 			speedY = -speedY;
 		y = y + speedY;
 		

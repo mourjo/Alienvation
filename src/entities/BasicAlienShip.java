@@ -20,8 +20,8 @@ public class BasicAlienShip extends AlienShip {
 	public BasicAlienShip()
 	{
 		super();
-		x = Simulator.canvasWidth;
-		y = gen.nextInt(Simulator.canvasHeight) + 1;
+		x = Simulator.getInstance().getWidth();
+		y = gen.nextInt(Simulator.getInstance().getHeight()) + 1;
 		image = image1;
 		changeColorInterval = gen.nextInt(30) + 50;
 		
