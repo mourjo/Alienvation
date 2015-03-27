@@ -59,7 +59,9 @@ public abstract class Actor {
 	
 	public void cleanUp(ActorSet actors)
 	{
-		if(x < -50 || y < -50 || x > Simulator.canvasWidth + 50 || y > Simulator.canvasHeight + 50)
+		Simulator simulator = Simulator.getInstance();
+		
+		if(x < -50 || y < -50 || x > simulator.getWidth() + 50 || y > simulator.getHeight() + 50)
 		{
 			if(this.getType() == Actor.PLAYER_BULLET)
 				actors.getPlayerBullets().remove(this);

@@ -23,11 +23,32 @@ public class Simulator extends JPanel {
 
 	private static final long serialVersionUID = -5555914128154149540L;
 	private int score;
-	public ActorSet actors;
-	static Simulator _singleton = null;
-	ActorCreator actorFactory;
+	private ActorSet actors;
+	private static Simulator _singleton = null;
+	private ActorCreator actorFactory;
 	public static int canvasWidth, canvasHeight;
-	Random gen;
+	private Random gen;
+	
+	public static void setSizes(double w, double h)
+	{
+		canvasHeight = (int)h;
+		canvasWidth = (int)w;
+	}
+	
+	public int getHeight()
+	{
+		return (int) getSize().getHeight();
+	}
+	
+	public int getWidth()
+	{
+		return (int) getSize().getWidth();
+	}
+	
+//	public static void getSize()
+//	{
+//		
+//	}
 	
 	List<Point> stars;
 
