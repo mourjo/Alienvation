@@ -74,8 +74,10 @@ public class BasicAlienShip extends AlienShip {
 	@Override
 	public int act(ActorSet actors) {
 		x -= speedX;
+		
 		if(gen.nextInt(1000) <= 5)
-			actors.getAlienBullets().add(new AlienBullet(x, y, gen.nextInt(5)+2));
+			actors.getAlienBullets().add(new AlienBullet(x, y + 10, 1 + speedX));
+		
 		return 0;
 	}
 

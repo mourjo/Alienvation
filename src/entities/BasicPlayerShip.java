@@ -59,12 +59,13 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
-		if(y+50 == Simulator.canvasHeight || y == 0)
+		if(y+50 >= Simulator.canvasHeight || y <= 0)
 			speedY = -speedY;
 		y = y + speedY;
-
-		if(gen.nextInt(1000) <= 5)
-			actors.getPlayerBullets().add(new PlayerBullet(x+40,y));
+		
+		if(gen.nextFloat() <= firingProbability)
+			actors.getPlayerBullets().add(new PlayerBullet(x + 70, y + 15));
+		
 		return 0;
 	}
 

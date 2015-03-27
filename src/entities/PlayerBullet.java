@@ -35,8 +35,8 @@ public class PlayerBullet extends Bullet {
 	@Override
 	public int act(ActorSet actors) {
 		// TODO Auto-generated method stub
-		x++;
-		cleanUp(actors);
+		x += speedX;
+		
 		return 0;
 	}
 

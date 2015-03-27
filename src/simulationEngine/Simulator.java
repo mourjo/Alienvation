@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,7 +23,7 @@ public class Simulator extends JPanel {
 
 	private static final long serialVersionUID = -5555914128154149540L;
 	private int score;
-	ActorSet actors;
+	public ActorSet actors;
 	static Simulator _singleton = null;
 	ActorCreator actorFactory;
 	public static int canvasWidth, canvasHeight;
@@ -68,20 +70,26 @@ public class Simulator extends JPanel {
 		
 	}
 
-	private void removeActor(Actor actor)
-	{
-		if (actor.getType() == Actor.PLAYER_SHIP)
-			actors.getPlayerShips().remove(actor);
-		
-		else if (actor.getType() == Actor.ALIEN_SHIP)
-			actors.getAlienShips().remove(actor);
-		
-		else if (actor.getType() == Actor.PLAYER_BULLET)
-			actors.getPlayerBullets().remove(actor);
-		
-		else if (actor.getType() == Actor.ALIEN_BULLET)
-			actors.getPlayerShips().remove(actor);
-	}
+//	private void cleanUp()
+//	{
+//		for(Actor actor : actors.getAllActors())
+//		{
+//			if(actor.getX() < 0 || actor.getY() < 0 || actor.getX() > Simulator.canvasWidth || actor.getY() > Simulator.canvasHeight)
+//			{
+//				if (actor.getType() == Actor.PLAYER_SHIP)
+//					actors.getPlayerShips().remove(actor);
+//				
+//				else if (actor.getType() == Actor.ALIEN_SHIP)
+//					actors.getAlienShips().remove(actor);
+//				
+//				else if (actor.getType() == Actor.PLAYER_BULLET)
+//					actors.getPlayerBullets().remove(actor);
+//				
+//				else if (actor.getType() == Actor.ALIEN_BULLET)
+//					actors.getPlayerShips().remove(actor);
+//			}
+//		}
+//	}
 
 	public List<PlayerShip> getPlayerShips()
 	{
@@ -103,29 +111,29 @@ public class Simulator extends JPanel {
 		return actors.getAlienBullets();
 	}
 	
-	@Deprecated
-	public void cleanUp()
-	{
-		List<PlayerBullet> outOfScreenPlayerBullets = new ArrayList<PlayerBullet>();
-		for(PlayerBullet b : actors.getPlayerBullets())
-		{
-			Point position = b.getPosition();
-			if(position.getX() < 0 || position.getY() < 0)
-				outOfScreenPlayerBullets.add(b);
-			if(position.getX() > canvasWidth || position.getY() > canvasHeight)
-				outOfScreenPlayerBullets.add(b);
-		}
-		actors.getPlayerBullets().removeAll(outOfScreenPlayerBullets);
-		
-		List<AlienBullet> outOfScreenAlienBullets = new ArrayList<AlienBullet>();
-		for(AlienBullet b : actors.getAlienBullets())
-		{
-			Point position = b.getPosition();
-			if(position.getX() < 0 || position.getY() < 0)
-				outOfScreenAlienBullets.add(b);
-		}
-		actors.getAlienBullets().removeAll(outOfScreenAlienBullets);
-	}
+//	@Deprecated
+//	public void cleanUp()
+//	{
+//		List<PlayerBullet> outOfScreenPlayerBullets = new ArrayList<PlayerBullet>();
+//		for(PlayerBullet b : actors.getPlayerBullets())
+//		{
+//			Point position = b.getPosition();
+//			if(position.getX() < 0 || position.getY() < 0)
+//				outOfScreenPlayerBullets.add(b);
+//			if(position.getX() > canvasWidth || position.getY() > canvasHeight)
+//				outOfScreenPlayerBullets.add(b);
+//		}
+//		actors.getPlayerBullets().removeAll(outOfScreenPlayerBullets);
+//		
+//		List<AlienBullet> outOfScreenAlienBullets = new ArrayList<AlienBullet>();
+//		for(AlienBullet b : actors.getAlienBullets())
+//		{
+//			Point position = b.getPosition();
+//			if(position.getX() < 0 || position.getY() < 0)
+//				outOfScreenAlienBullets.add(b);
+//		}
+//		actors.getAlienBullets().removeAll(outOfScreenAlienBullets);
+//	}
 
 	@Override
 	public void paintComponent(Graphics g)
@@ -139,29 +147,17 @@ public class Simulator extends JPanel {
 		for(int i = 0; i < stars.size(); i++)
 			g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 		
-		for(PlayerShip a : actors.getPlayerShips())
+		for(int type : actors.getActors().keySet())
 		{
-			a.paintComponent(g2d);
-			a.act(actors);
-		}
-		
-		for(AlienShip a : actors.getAlienShips())
-		{
-			a.paintComponent(g2d);
-			a.act(actors);
-		}
-		
-		for(PlayerBullet a : actors.getPlayerBullets())
-		{
-			a.paintComponent(g2d);
-			a.act(actors);
-		}
-		
-		for(AlienBullet a : actors.getAlienBullets())
-		{
-			a.paintComponent(g2d);
-			a.act(actors);
+			for(Actor actor : actors.getActors().get(type))
+			{
+				actor.paintComponent(g2d);
+				actor.act(actors);
+				actor.cleanUp(actors);
+			}
 		}
 	}
 
+	
+	
 }

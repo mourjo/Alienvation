@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.util.Random;
 
 import simulationEngine.ActorSet;
+import simulationEngine.Simulator;
 
 public abstract class Actor {
 	
@@ -36,6 +37,16 @@ public abstract class Actor {
 		return speedY;
 	}
 	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
 	public void setSpeedX(int xSpeed)
 	{
 		speedX = xSpeed;
@@ -44,5 +55,23 @@ public abstract class Actor {
 	public void setSpeedY(int ySpeed)
 	{
 		speedY = ySpeed;
+	}
+	
+	public void cleanUp(ActorSet actors)
+	{
+		if(x < -50 || y < -50 || x > Simulator.canvasWidth + 50 || y > Simulator.canvasHeight + 50)
+		{
+			if(this.getType() == Actor.PLAYER_BULLET)
+				actors.getPlayerBullets().remove(this);
+
+			if(this.getType() == Actor.ALIEN_BULLET)
+				actors.getAlienBullets().remove(this);
+			
+			if(this.getType() == Actor.PLAYER_SHIP)
+				actors.getPlayerShips().remove(this);
+
+			if(this.getType() == Actor.ALIEN_SHIP)
+				actors.getAlienShips().remove(this);
+		}
 	}
 }
