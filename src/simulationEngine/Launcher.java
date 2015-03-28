@@ -29,10 +29,15 @@ public class Launcher extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(!paused && e.getKeyChar() == ' ')
-					ActorCreator.getInstance().createBasicAlienShip(simulator.getAlienShips(), 10);
+				if(e.getKeyChar() == ' ')
+					simulator.createAlienWave();
 				if(e.getKeyChar() == 'p' || e.getKeyChar() == 'P' )
-					paused = !paused;
+					simulator.togglePause();
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE ){
+					Launcher.this.dispose();
+					System.exit(0);
+				}
+				
 			}
 			
 		});
@@ -42,12 +47,7 @@ public class Launcher extends JFrame {
 
 			@Override
 			public void componentResized(ComponentEvent ev) {
-				Component c = (Component)ev.getSource();
-				Dimension x = c.getSize();
-				simulator.setSize(x);
-//				setSize(x.getWidth(), x.getHeight());
-				
-				//simulator.setSize(x);
+				simulator.setSize(((Component)ev.getSource()).getSize());
 			}
 			
 		});
