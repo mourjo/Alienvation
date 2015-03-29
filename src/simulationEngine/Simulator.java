@@ -71,8 +71,8 @@ public class Simulator extends JPanel {
 		setSize(new Dimension(canvasWidth, canvasHeight));
 		
 		stars = new ArrayList<Point>();
-		for (int i = 0; i < 100; i++)
-			stars.add(new Point(gen.nextInt(canvasWidth), gen.nextInt(canvasHeight)));
+		for (int i = 0; i < 1000; i++)
+			stars.add(new Point(gen.nextInt(canvasWidth*2), gen.nextInt(canvasHeight*2)));
 		
 		actorFactory.createBasicAlienShip(getAlienShips(), 10);
 		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);

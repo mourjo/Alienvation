@@ -28,9 +28,7 @@ public class BasicAlienShip extends AlienShip {
 			try {
 				image1 = ImageIO.read(getClass().getResource("/alienShip3.png"));
 				image2 = ImageIO.read(getClass().getResource("/alienShip4.png"));
-//				image2 = ImageIO.read(new File(getClass().getResource("/alienShip4.png").toURI()));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}

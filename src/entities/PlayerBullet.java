@@ -16,7 +16,7 @@ public class PlayerBullet extends Bullet {
 
 	@Override
 	public void paintComponent(Graphics2D g) {
-		g.setColor(Color.WHITE);
+		g.setColor(Color.YELLOW);
 		g.fillRect(x, y, 6, 3);
 
 	}

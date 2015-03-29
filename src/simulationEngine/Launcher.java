@@ -18,12 +18,10 @@ public class Launcher extends JFrame {
 	{
 		super(name);
 		simulator = Simulator.getInstance();
-		
-		this.setSize(960, 700);
-		
-		this.setVisible(true);
-		this.add(simulator);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(960, 700);
+		setVisible(true);
+		add(simulator);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		addKeyListener(new KeyAdapter(){
 
