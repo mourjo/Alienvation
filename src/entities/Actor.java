@@ -16,6 +16,8 @@ public abstract class Actor {
 
 	protected int speedX = 1, speedY = 1;
 	protected int x, y;
+	
+	protected boolean paused = false;
 
 	protected Random gen = new Random();
 
@@ -30,6 +32,21 @@ public abstract class Actor {
 	public int getSpeedX()
 	{
 		return speedX;
+	}
+	
+	public void pause()
+	{
+		paused = true;
+	}
+	
+	public void unPause()
+	{
+		paused = false;
+	}
+	
+	public boolean isPaused()
+	{
+		return paused;
 	}
 
 	public int getSpeedY()

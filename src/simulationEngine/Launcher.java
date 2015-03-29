@@ -1,7 +1,6 @@
 package simulationEngine;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -14,13 +13,14 @@ public class Launcher extends JFrame {
 	private static final long serialVersionUID = 5859915989867575984L;
 	Simulator simulator;
 	boolean paused = false;
+	boolean init = true;
 	Launcher(String name)
 	{
 		super(name);
 		simulator = Simulator.getInstance();
 		
 		this.setSize(960, 700);
-		simulator.init(this.getWidth(), this.getHeight());
+		
 		this.setVisible(true);
 		this.add(simulator);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,6 +29,8 @@ public class Launcher extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if(init && e.getKeyCode() == KeyEvent.VK_ENTER)
+					simulator.init(getWidth(), getHeight());
 				if(e.getKeyChar() == ' ')
 					simulator.createAlienWave();
 				if(e.getKeyChar() == 'p' || e.getKeyChar() == 'P' )

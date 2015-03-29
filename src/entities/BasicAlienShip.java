@@ -2,9 +2,7 @@ package entities;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -28,8 +26,8 @@ public class BasicAlienShip extends AlienShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(getClass().getResourceAsStream("/alienShip3.png"));
-				image2 = ImageIO.read(getClass().getResourceAsStream("/alienShip4.png"));
+				image1 = ImageIO.read(getClass().getResource("/alienShip3.png"));
+				image2 = ImageIO.read(getClass().getResource("/alienShip4.png"));
 //				image2 = ImageIO.read(new File(getClass().getResource("/alienShip4.png").toURI()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -57,10 +55,13 @@ public class BasicAlienShip extends AlienShip {
 
 	@Override
 	public void paintComponent(Graphics2D g2d) {
-		if(changeColorInterval-- == 0)
+		if(!paused)
 		{
-			image = image == image1 ? image2 : image1;
-			changeColorInterval = gen.nextInt(30) + 50;
+			if(changeColorInterval-- == 0)
+			{
+				image = image == image1 ? image2 : image1;
+				changeColorInterval = gen.nextInt(30) + 50;
+			}
 		}
 		g2d.drawImage(image, x, y, null);
 
