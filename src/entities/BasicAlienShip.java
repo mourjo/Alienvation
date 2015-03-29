@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -27,8 +28,9 @@ public class BasicAlienShip extends AlienShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(new File("img/alienShip3.png"));
-				image2 = ImageIO.read(new File("img/alienShip4.png"));
+				image1 = ImageIO.read(getClass().getResourceAsStream("/alienShip3.png"));
+				image2 = ImageIO.read(getClass().getResourceAsStream("/alienShip4.png"));
+//				image2 = ImageIO.read(new File(getClass().getResource("/alienShip4.png").toURI()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -45,8 +47,8 @@ public class BasicAlienShip extends AlienShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(new File("img/alienShip3.png"));
-				image2 = ImageIO.read(new File("img/alienShip4.png"));
+				image1 = ImageIO.read(getClass().getResourceAsStream("/alienShip3.png"));//classloader.getResource("/image/name.jpg")
+				image2 = ImageIO.read(getClass().getResourceAsStream("/alienShip4.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

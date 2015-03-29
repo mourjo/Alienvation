@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -13,7 +14,7 @@ import simulationEngine.Simulator;
 public class BasicPlayerShip extends PlayerShip {
 	static BufferedImage image1 = null;
 	
-	public BasicPlayerShip()
+	public BasicPlayerShip() 
 	{
 		super();
 		x = gen.nextInt(Simulator.getInstance().getWidth());
@@ -21,7 +22,7 @@ public class BasicPlayerShip extends PlayerShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(new File("img/playerShip3.png"));
+				image1 = ImageIO.read(getClass().getResourceAsStream("/playerShip3.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -36,7 +37,7 @@ public class BasicPlayerShip extends PlayerShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(new File("img/playerShip3.png"));
+				image1 = ImageIO.read(getClass().getResourceAsStream("/alienShip4.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
