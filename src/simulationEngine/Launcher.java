@@ -12,7 +12,6 @@ public class Launcher extends JFrame {
 
 	private static final long serialVersionUID = 5859915989867575984L;
 	Simulator simulator;
-	boolean paused = false;
 	boolean init = true;
 	Launcher(String name)
 	{
@@ -58,8 +57,7 @@ public class Launcher extends JFrame {
 		while(true)
 		{
 			Thread.sleep(10);
-			if(!paused)
-				simulator.repaint();
+			simulator.repaint();
 //			System.out.println(Simulator.getInstance().actors.getAlienShips().size());
 		}
 	}

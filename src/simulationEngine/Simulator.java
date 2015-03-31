@@ -56,8 +56,8 @@ public class Simulator extends JPanel {
 	public void togglePause()
 	{
 		paused = !paused;
-		if(!paused)
-			pausedPainted = false;
+//		if(!paused)
+//			pausedPainted = false;
 	}
 	
 	public boolean isPaused()
@@ -180,7 +180,6 @@ public class Simulator extends JPanel {
 			double width = sm.getWidth("PAUSED");
 			Dimension size = getSize();
 			g2d.drawString("PAUSED", (float)(size.width/2d - width/2d), (float)(size.height/2d ));
-			pausedPainted = true;
 			
 		}
 	}
