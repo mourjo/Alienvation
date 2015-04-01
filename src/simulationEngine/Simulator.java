@@ -35,7 +35,7 @@ public class Simulator extends JPanel {
 	private boolean pausedPainted = false;
 	private boolean initial = true;
 	private static BufferedImage image = null;
-	
+
 	private List<Point> stars;
 
 	private Simulator()
@@ -53,29 +53,35 @@ public class Simulator extends JPanel {
 		}*/
 	}
 	
+	public ActorSet getActors()
+	{
+		return actors;
+	}
+
 	public void togglePause()
 	{
 		paused = !paused;
-//		if(!paused)
-//			pausedPainted = false;
+		//		if(!paused)
+		//			pausedPainted = false;
 	}
-	
+
 	public boolean isPaused()
 	{
 		return paused;
 	}
-	
+
 	void init(int canvasWidth, int canvasHeight)
 	{
 		initial = false;
 		setSize(new Dimension(canvasWidth, canvasHeight));
-		
+
 		stars = new ArrayList<Point>();
 		for (int i = 0; i < 10; i++)
 			stars.add(new Point(gen.nextInt(canvasWidth), gen.nextInt(canvasHeight)));
-		
+
 		actorFactory.createBasicAlienShip(getAlienShips(), 10);
 		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);
+		image = null;
 	}
 
 	static public Simulator getInstance()
@@ -104,14 +110,14 @@ public class Simulator extends JPanel {
 	{
 		return actors.getAlienBullets();
 	}
-	
+
 	public void createAlienWave()
 	{
 		if(!paused)
 			actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
 	}
-	
-	
+
+
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -119,61 +125,59 @@ public class Simulator extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		this.setBackground(Color.BLACK);
-		
-		
+
+
 		if(initial)
 		{
-//			g2d.drawImage(image, 0, 0, getSize().width, getSize().height, null);
-			
+			//			g2d.drawImage(image, 0, 0, getSize().width, getSize().height, null);
+
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 45));
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
 			double width = sm.getWidth("Alienvation");
 			Dimension size = getSize();
 			g2d.drawString("Alienvation", (float)(size.width/2d - width/2d), (float)((size.height/2d)*0.8 ));
-			
+
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.ITALIC, 20));
 			sm = new DrawStringMeasurement(g2d);
 			width = sm.getWidth("Press enter to start");
 			g2d.drawString("Press enter to start", (float)(size.width/2d - width/2d), (float)((size.height/2d) * 0.9 ));
-			
+
 		}
 		else if(!paused)
 		{
-			
-			
+
+
 			g2d.setColor(Color.GRAY);
-			
+
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
-			
+
 			for(int type : actors.getActors().keySet())
 			{
 				long t = System.currentTimeMillis();
 				for(Actor actor : actors.getActors().get(type))
 				{
-					
 					actor.paintComponent(g2d);
-					
 					actor.act(actors);
-					actor.cleanUp(actors);
-					
-					
+//					actor.cleanUp(actors);
 				}
+				
 				System.out.println(actors.getPlayerShips().size() +" "+ actors.getPlayerBullets().size() +" " +actors.getAlienShips().size() +" "+ actors.getAlienBullets().size());
-//				if(System.currentTimeMillis() - t > 30)
-//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
+				//				if(System.currentTimeMillis() - t > 30)
+				//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
 			}
+			Actor.cleanUp2(actors);
 		}
 		else
 		{
-			
+
 			g2d.setColor(Color.GRAY);
-			
+
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
-			
+
 			for(int type : actors.getActors().keySet())
 			{
 				for(Actor actor : actors.getActors().get(type))
@@ -189,8 +193,8 @@ public class Simulator extends JPanel {
 			double width = sm.getWidth("PAUSED");
 			Dimension size = getSize();
 			g2d.drawString("PAUSED", (float)(size.width/2d - width/2d), (float)(size.height/2d ));
-			
+
 		}
-		
+
 	}
 }

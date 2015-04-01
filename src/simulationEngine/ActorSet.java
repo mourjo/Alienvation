@@ -24,13 +24,28 @@ public class ActorSet {
 	
 	private Map<Integer, List<? extends Actor>> allActors;
 	
-	ActorSet()
+	/*ActorSet()
 	{
 		playerShips = new CopyOnWriteArrayList<PlayerShip>(new ArrayList<PlayerShip>());
 		alienShips = new CopyOnWriteArrayList<AlienShip>(new ArrayList<AlienShip>());
 
 		playerBullets = new CopyOnWriteArrayList<PlayerBullet>(new ArrayList<PlayerBullet>());
 		alienBullets = new CopyOnWriteArrayList<AlienBullet>(new ArrayList<AlienBullet>());
+		
+		allActors = new HashMap<Integer, List<? extends Actor>>();
+		allActors.put(Actor.PLAYER_BULLET, playerBullets);
+		allActors.put(Actor.ALIEN_BULLET, alienBullets);
+		allActors.put(Actor.PLAYER_SHIP, playerShips);
+		allActors.put(Actor.ALIEN_SHIP, alienShips);
+	}*/
+	
+	ActorSet()
+	{
+		playerShips = new ArrayList<PlayerShip>();
+		alienShips = new ArrayList<AlienShip>();
+
+		playerBullets = new ArrayList<PlayerBullet>();
+		alienBullets = new ArrayList<AlienBullet>();
 		
 		allActors = new HashMap<Integer, List<? extends Actor>>();
 		allActors.put(Actor.PLAYER_BULLET, playerBullets);

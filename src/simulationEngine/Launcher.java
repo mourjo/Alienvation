@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
+import entities.Actor;
+
 public class Launcher extends JFrame {
 
 	private static final long serialVersionUID = 5859915989867575984L;
@@ -58,6 +60,7 @@ public class Launcher extends JFrame {
 		{
 //			Thread.sleep(1);
 			simulator.repaint();
+			
 //			System.out.println(Simulator.getInstance().actors.getAlienShips().size());
 		}
 	}

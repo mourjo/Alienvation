@@ -1,6 +1,8 @@
 package entities;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import simulationEngine.ActorSet;
@@ -87,5 +89,19 @@ public abstract class Actor {
 
 		if(this.getType() == Actor.ALIEN_SHIP && x <= 0)
 			actors.getAlienShips().remove(this);
+	}
+	
+	public static void cleanUp2(ActorSet actors)
+	{
+		for(int type : actors.getActors().keySet())
+		{
+			List<Object> delList = new ArrayList<Object>();
+			for(Actor actor : actors.getActors().get(type))
+			{
+				if(actor.x < 0 || actor.y < 0 || actor.x > Simulator.getInstance().getWidth() || actor.y > Simulator.getInstance().getHeight())
+					delList.add(actor);
+			}
+			actors.getActors().get(type).removeAll(delList);
+		}
 	}
 }
