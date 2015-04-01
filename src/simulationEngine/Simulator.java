@@ -44,13 +44,13 @@ public class Simulator extends JPanel {
 		score = 0;
 		actorFactory = ActorCreator.getInstance();
 		gen = new Random();
-		try {
+		/*try {
 			image = ImageIO.read(getClass().getResource("/earth.jpg"));
 //			image = ImageIO.read(getClass().getResourceAsStream("/milkyWay.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public void togglePause()
@@ -71,8 +71,8 @@ public class Simulator extends JPanel {
 		setSize(new Dimension(canvasWidth, canvasHeight));
 		
 		stars = new ArrayList<Point>();
-		for (int i = 0; i < 1000; i++)
-			stars.add(new Point(gen.nextInt(canvasWidth*2), gen.nextInt(canvasHeight*2)));
+		for (int i = 0; i < 10; i++)
+			stars.add(new Point(gen.nextInt(canvasWidth), gen.nextInt(canvasHeight)));
 		
 		actorFactory.createBasicAlienShip(getAlienShips(), 10);
 		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);
@@ -118,10 +118,12 @@ public class Simulator extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		this.setBackground(Color.BLACK);
+		
 		
 		if(initial)
 		{
-			g2d.drawImage(image, 0, 0, getSize().width, getSize().height, null);
+//			g2d.drawImage(image, 0, 0, getSize().width, getSize().height, null);
 			
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 45));
@@ -140,7 +142,7 @@ public class Simulator extends JPanel {
 		else if(!paused)
 		{
 			
-			this.setBackground(Color.BLACK);
+			
 			g2d.setColor(Color.GRAY);
 			
 			for(int i = 0; i < stars.size(); i++)
@@ -148,18 +150,25 @@ public class Simulator extends JPanel {
 			
 			for(int type : actors.getActors().keySet())
 			{
+				long t = System.currentTimeMillis();
 				for(Actor actor : actors.getActors().get(type))
 				{
+					
 					actor.paintComponent(g2d);
+					
 					actor.act(actors);
 					actor.cleanUp(actors);
+					
+					
 				}
+				System.out.println(actors.getPlayerShips().size() +" "+ actors.getPlayerBullets().size() +" " +actors.getAlienShips().size() +" "+ actors.getAlienBullets().size());
+//				if(System.currentTimeMillis() - t > 30)
+//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
 			}
 		}
 		else
 		{
 			
-			this.setBackground(Color.BLACK);
 			g2d.setColor(Color.GRAY);
 			
 			for(int i = 0; i < stars.size(); i++)
@@ -182,5 +191,6 @@ public class Simulator extends JPanel {
 			g2d.drawString("PAUSED", (float)(size.width/2d - width/2d), (float)(size.height/2d ));
 			
 		}
+		
 	}
 }

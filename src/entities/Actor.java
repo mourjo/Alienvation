@@ -76,16 +76,16 @@ public abstract class Actor {
 
 	public void cleanUp(ActorSet actors)
 	{
-		if(this.getType() == Actor.PLAYER_BULLET && x > Simulator.getInstance().getWidth()*2)
+		if(this.getType() == Actor.PLAYER_BULLET && x > Simulator.getInstance().getWidth())
 			actors.getPlayerBullets().remove(this);
 
-		if(this.getType() == Actor.ALIEN_BULLET && y < -50)
+		if(this.getType() == Actor.ALIEN_BULLET && x <= 0)
 			actors.getAlienBullets().remove(this);
 
 //		if(this.getType() == Actor.PLAYER_SHIP)
 //			actors.getPlayerShips().remove(this);
 
-		if(this.getType() == Actor.ALIEN_SHIP && x < -50)
+		if(this.getType() == Actor.ALIEN_SHIP && x <= 0)
 			actors.getAlienShips().remove(this);
 	}
 }

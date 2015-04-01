@@ -56,7 +56,7 @@ public class Launcher extends JFrame {
 	{
 		while(true)
 		{
-			Thread.sleep(1);
+//			Thread.sleep(1);
 			simulator.repaint();
 //			System.out.println(Simulator.getInstance().actors.getAlienShips().size());
 		}
