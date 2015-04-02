@@ -32,7 +32,7 @@ public class ActorCreator {
 	public void createBasicAlienShip(List<? super BasicAlienShip> basicAlienShips, int count)
 	{
 		Simulator simulator = Simulator.getInstance();
-		for(int i = 30; i < simulator.getHeight() - 50; i += (simulator.getHeight() - 30 )/count)
-			basicAlienShips.add(new BasicAlienShip(simulator.getWidth(), i - gen.nextInt(40)));
+		for(int i = 0; i < simulator.getHeight(); i += (simulator.getHeight())/count)
+			basicAlienShips.add(new BasicAlienShip(simulator.getWidth(), (i + gen.nextInt(40))%(simulator.getHeight()+20)));
 	}
 }

@@ -171,7 +171,7 @@ public class Simulator extends JPanel {
 				//				if(System.currentTimeMillis() - t > 30)
 				//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
 			}
-			Actor.cleanUp2(actors);
+			cleanUp(actors);
 		}
 		else
 		{
@@ -210,5 +210,22 @@ public class Simulator extends JPanel {
 		 g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		 g2d.drawString("Frame rate: " + framerate, 800, 20);
 
+	}
+	
+	private void cleanUp(ActorSet actors)
+	{
+		for(int type : actors.getActors().keySet())
+		{
+			List<Object> delList = new ArrayList<Object>();
+			for(Actor actor : actors.getActors().get(type))
+			{
+				if(actor.getX() < -10 || 
+						actor.getY() < -10 || 
+						actor.getX() > Simulator.getInstance().getWidth() + 10 || 
+						actor.getY() > Simulator.getInstance().getHeight() + 10)
+					delList.add(actor);
+			}
+			actors.getActors().get(type).removeAll(delList);
+		}
 	}
 }

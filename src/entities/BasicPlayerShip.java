@@ -35,7 +35,7 @@ public class BasicPlayerShip extends PlayerShip {
 		
 		if(image1 == null)
 			try {
-				image1 = ImageIO.read(getClass().getResource("/alienShip4.png"));
+				image1 = ImageIO.read(getClass().getResource("/playerShip3.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -58,9 +58,9 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
-		if(y + 45 >= Simulator.getInstance().getHeight() || y <= 0)
-			speedY = -speedY;
-		y = y + speedY;
+		if(y >= Simulator.getInstance().getHeight()+speedY || y <= -speedY)
+			direction = -direction;
+		y = y + direction*speedY;
 		
 		if(gen.nextFloat() <= firingProbability)
 			actors.getPlayerBullets().add(new PlayerBullet(x + 70, y + 15));

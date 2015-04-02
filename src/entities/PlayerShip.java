@@ -3,7 +3,7 @@ package entities;
 import java.awt.Graphics2D;
 
 public abstract class PlayerShip extends Ship {
-
+	int direction = 1;
 	@Override
 	public void paintComponent(Graphics2D g) {
 		// TODO Auto-generated method stub
