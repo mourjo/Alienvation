@@ -16,7 +16,7 @@ public abstract class Actor {
 	public final static Integer PLAYER_BULLET = 400;
 	public final static Integer ALIEN_BULLET = 600;
 
-	protected int speedX = 1, speedY = 1;
+	protected int speedX = 5, speedY = 5;
 	protected int x, y;
 	
 	protected boolean paused = false;
@@ -98,7 +98,10 @@ public abstract class Actor {
 			List<Object> delList = new ArrayList<Object>();
 			for(Actor actor : actors.getActors().get(type))
 			{
-				if(actor.x < 0 || actor.y < 0 || actor.x > Simulator.getInstance().getWidth() || actor.y > Simulator.getInstance().getHeight())
+				if(actor.x < -10 || 
+						actor.y < -10 || 
+						actor.x > Simulator.getInstance().getWidth() + 10 || 
+						actor.y > Simulator.getInstance().getHeight() + 10)
 					delList.add(actor);
 			}
 			actors.getActors().get(type).removeAll(delList);

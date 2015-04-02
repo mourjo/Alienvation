@@ -33,8 +33,11 @@ public class Simulator extends JPanel {
 	private Random gen;
 	private boolean paused = false;
 	private boolean pausedPainted = false;
-	private boolean initial = true;
+	private boolean initial = false;
 	private static BufferedImage image = null;
+	private int frameCount = 0, framerate;
+	long time = System.nanoTime();
+	final int frames = 24;
 
 	private List<Point> stars;
 
@@ -164,7 +167,7 @@ public class Simulator extends JPanel {
 //					actor.cleanUp(actors);
 				}
 				
-				System.out.println(actors.getPlayerShips().size() +" "+ actors.getPlayerBullets().size() +" " +actors.getAlienShips().size() +" "+ actors.getAlienBullets().size());
+//				System.out.println(actors.getPlayerShips().size() +" "+ actors.getPlayerBullets().size() +" " +actors.getAlienShips().size() +" "+ actors.getAlienBullets().size());
 				//				if(System.currentTimeMillis() - t > 30)
 				//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
 			}
@@ -195,6 +198,17 @@ public class Simulator extends JPanel {
 			g2d.drawString("PAUSED", (float)(size.width/2d - width/2d), (float)(size.height/2d ));
 
 		}
+		
+		 if(frameCount++ == frames)
+		 {
+			 framerate = (int) (((double)frameCount/(System.nanoTime() - time)) * Math.pow(10,9));
+			 time = System.nanoTime();
+			 
+			 frameCount = 0;
+		 }
+		 g2d.setColor(Color.RED);
+		 g2d.setFont(new Font("Arial", Font.BOLD, 20));
+		 g2d.drawString("Frame rate: " + framerate, 800, 20);
 
 	}
 }

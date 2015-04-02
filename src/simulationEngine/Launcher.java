@@ -14,7 +14,7 @@ public class Launcher extends JFrame {
 
 	private static final long serialVersionUID = 5859915989867575984L;
 	Simulator simulator;
-	boolean init = true;
+	boolean init = false;
 	Launcher(String name)
 	{
 		super(name);
@@ -23,7 +23,7 @@ public class Launcher extends JFrame {
 		setVisible(true);
 		add(simulator);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		simulator.init(getWidth(), getHeight());
 		addKeyListener(new KeyAdapter(){
 
 			@Override
@@ -58,10 +58,9 @@ public class Launcher extends JFrame {
 	{
 		while(true)
 		{
-//			Thread.sleep(1);
+			Thread.sleep(15);
 			simulator.repaint();
 			
-//			System.out.println(Simulator.getInstance().actors.getAlienShips().size());
 		}
 	}
 	
