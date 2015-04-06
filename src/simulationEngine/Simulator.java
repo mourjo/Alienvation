@@ -21,8 +21,10 @@ import javax.swing.JPanel;
 import entities.Actor;
 import entities.AlienBullet;
 import entities.AlienShip;
+import entities.Bullet;
 import entities.PlayerBullet;
 import entities.PlayerShip;
+import entities.Ship;
 
 public class Simulator extends JPanel {
 
@@ -169,7 +171,7 @@ public class Simulator extends JPanel {
 
 	public void createAlienWave()
 	{
-		if(!paused)
+		if(!paused && actors.getAlienShips().size() == 0)
 			actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
 	}
 
@@ -181,8 +183,7 @@ public class Simulator extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		this.setBackground(Color.BLACK);
-
-
+		
 		if(initial)
 		{
 			g2d.setColor(Color.WHITE);
@@ -306,8 +307,44 @@ public class Simulator extends JPanel {
 							if(Math.abs(actor1.getX() - actor.getX()) <= 20 
 									&&  Math.abs(actor1.getY() - actor.getY() ) <= 20)
 							{
-								delList.add(actor);
-								delList.add(actor1);
+								if(actor1.getType() == Actor.PLAYER_SHIP)
+								{
+									if(actor.getType() == Actor.ALIEN_BULLET)
+									{
+										if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
+											delList.add(actor1);
+										delList.add(actor);
+									}
+									
+									else
+									{
+										if(((Ship)actor1).reduceLife(((Ship)actor).getDamageOnCollision()))
+											delList.add(actor1);
+										
+										
+										if(((Ship)actor).reduceLife(((Ship)actor1).getDamageOnCollision()))
+											delList.add(actor);
+									}
+								}
+								
+								else if(actor1.getType() == Actor.ALIEN_SHIP)
+								{
+									if(actor.getType() == Actor.PLAYER_BULLET)
+									{
+										if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
+											delList.add(actor1);
+										delList.add(actor);
+									}
+									else
+									{
+										if(((Ship)actor1).reduceLife(((Ship)actor).getDamageOnCollision()))
+											delList.add(actor1);
+										
+										
+										if(((Ship)actor).reduceLife(((Ship)actor1).getDamageOnCollision()))
+											delList.add(actor);
+									}
+								}
 							}
 						}
 					}

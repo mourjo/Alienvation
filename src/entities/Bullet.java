@@ -3,7 +3,7 @@ package entities;
 import java.awt.Point;
 
 public abstract class Bullet extends Actor{
-	protected int power;
+	protected int power = 1;
 	
 	public Point getPosition()
 	{

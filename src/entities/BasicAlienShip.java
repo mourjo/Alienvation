@@ -20,6 +20,7 @@ public class BasicAlienShip extends AlienShip {
 	public BasicAlienShip()
 	{
 		super();
+		damage = 20;
 		x = Simulator.getInstance().getWidth();
 		y = gen.nextInt(Simulator.getInstance().getHeight()) + 1;
 		image = image1;

@@ -13,12 +13,13 @@ import simulationEngine.Slice;
 public class BasicPlayerShip extends PlayerShip {
 	static BufferedImage image1 = null;
 	static final int displayBuffer = 20;
-	double firingProbability = 0.09;
 	
 	public BasicPlayerShip(Slice s) 
 	{
 		super();
 		slice = s;
+		damage = 50;
+		firingProbability = 0.009;
 		
 		x = (int) (gen.nextInt((int) s.getWidth()) + s.getX());
 		y = (int) (gen.nextInt((int) s.getHeight()) + s.getY());
@@ -62,6 +63,9 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
+		
+		if(x >= Math.min(slice.getX() + slice.getWidth(), Simulator.getInstance().getWidth()) || x <= slice.getX())
+				x = (int) (gen.nextInt((int)slice.getWidth()) + slice.getX());
 		
 		if(y >= Math.min(slice.getY() + slice.getHeight() - displayBuffer, Simulator.getInstance().getHeight() - displayBuffer))
 			direction = -1;
