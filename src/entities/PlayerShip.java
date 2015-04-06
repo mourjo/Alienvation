@@ -2,18 +2,20 @@ package entities;
 
 import java.awt.Graphics2D;
 
+import simulationEngine.Slice;
+
 public abstract class PlayerShip extends Ship {
 	int direction = 1;
+	Slice slice;
+
 	@Override
 	public void paintComponent(Graphics2D g) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public int getSlice() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Slice getSlice() {
+		return slice;
 	}
 	
 	@Override
@@ -21,4 +23,9 @@ public abstract class PlayerShip extends Ship {
 		return Actor.PLAYER_SHIP;
 	}
 
+	@Override
+	public boolean isAlien()
+	{
+		return false;
+	}
 }

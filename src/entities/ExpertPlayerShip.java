@@ -3,6 +3,7 @@ package entities;
 import java.awt.Graphics2D;
 
 import simulationEngine.ActorSet;
+import simulationEngine.Slice;
 
 public class ExpertPlayerShip extends PlayerShip {
 
@@ -13,9 +14,9 @@ public class ExpertPlayerShip extends PlayerShip {
 	}
 
 	@Override
-	public int getSlice() {
+	public Slice getSlice() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override

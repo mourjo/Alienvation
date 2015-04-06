@@ -1,5 +1,6 @@
 package simulationEngine;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -32,12 +33,13 @@ public class Simulator extends JPanel {
 	private ActorCreator actorFactory;
 	private Random gen;
 	private boolean paused = false;
-	private boolean pausedPainted = false;
 	private boolean initial = false;
 	private static BufferedImage image = null;
 	private int frameCount = 0, framerate;
 	long time = System.nanoTime();
 	final int frames = 24;
+	private int numSlices = 4;
+	private Slice slices[][];
 
 	private List<Point> stars;
 
@@ -47,6 +49,7 @@ public class Simulator extends JPanel {
 		score = 0;
 		actorFactory = ActorCreator.getInstance();
 		gen = new Random();
+		slices = new Slice[numSlices][numSlices];
 		/*try {
 			image = ImageIO.read(getClass().getResource("/earth.jpg"));
 //			image = ImageIO.read(getClass().getResourceAsStream("/milkyWay.png"));
@@ -56,16 +59,52 @@ public class Simulator extends JPanel {
 		}*/
 	}
 	
+	@Override
+	public void setSize(Dimension d)
+	{
+		super.setSize(d);
+		
+		double sliceHeight = (double)d.getHeight()/numSlices;
+		double sliceWidth = (double)d.getWidth()/numSlices;
+		
+		for(int i = 0; i < slices.length; i++)
+		{
+			for(int j = 0; j < slices[i].length; j++)
+				slices[i][j].setValues(i*sliceWidth,j*sliceHeight,sliceWidth,sliceHeight); 
+		}
+		
+		stars = new ArrayList<Point>();
+		for (int i = 0; i < 500; i++)
+			stars.add(new Point(gen.nextInt((int)d.getWidth())*2, gen.nextInt((int)d.getHeight())*2));
+			
+	}
+	
+	public void setNumberOfSlices(int n) //n x n
+	{
+		numSlices = n;
+		slices = new Slice[numSlices][numSlices];
+		clear();
+		init(getSize().width, getSize().height);
+	}
+	
 	public ActorSet getActors()
 	{
 		return actors;
 	}
-
+	
+	public int numberOfSlices()
+	{
+		return numSlices;
+	}
+	
+	public Slice[][] getSlices()
+	{
+		return slices;
+	}
+	
 	public void togglePause()
 	{
 		paused = !paused;
-		//		if(!paused)
-		//			pausedPainted = false;
 	}
 
 	public boolean isPaused()
@@ -76,15 +115,21 @@ public class Simulator extends JPanel {
 	void init(int canvasWidth, int canvasHeight)
 	{
 		initial = false;
+		
+		double sliceHeight = (double)canvasHeight/numSlices;
+		double sliceWidth = (double)canvasWidth/numSlices;
+		
+		for(int i = 0; i < slices.length; i++)
+		{
+			for(int j = 0; j < slices[i].length; j++)
+				slices[i][j] = new Slice(i*sliceWidth,j*sliceHeight,sliceWidth,sliceHeight); 
+		}
+		
 		setSize(new Dimension(canvasWidth, canvasHeight));
-
-		stars = new ArrayList<Point>();
-		for (int i = 0; i < 10; i++)
-			stars.add(new Point(gen.nextInt(canvasWidth), gen.nextInt(canvasHeight)));
-
-		actorFactory.createBasicAlienShip(getAlienShips(), 10);
+		
 		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);
 		image = null;
+		paused = false;
 	}
 
 	static public Simulator getInstance()
@@ -92,6 +137,14 @@ public class Simulator extends JPanel {
 		if(_singleton == null)
 			_singleton = new Simulator();
 		return _singleton; 
+	}
+	
+	public void clear()
+	{
+		actors.getPlayerShips().clear();
+		actors.getPlayerBullets().clear();
+		actors.getAlienShips().clear();
+		actors.getAlienBullets().clear();
 	}
 
 	public List<PlayerShip> getPlayerShips()
@@ -132,8 +185,6 @@ public class Simulator extends JPanel {
 
 		if(initial)
 		{
-			//			g2d.drawImage(image, 0, 0, getSize().width, getSize().height, null);
-
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 45));
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
@@ -150,8 +201,18 @@ public class Simulator extends JPanel {
 		}
 		else if(!paused)
 		{
-
-
+			g2d.setColor(Color.WHITE);
+			
+			for(int i = 0; i < slices.length; i++)
+			{
+				for(int j = 0; j < slices[0].length; j++)
+				{
+					Slice slice = slices[i][j];
+					g2d.drawRect((int)slice.getX(), (int)slice.getY(), (int)slice.getWidth(), (int)slice.getHeight());
+				}
+				
+			}
+			
 			g2d.setColor(Color.GRAY);
 
 			for(int i = 0; i < stars.size(); i++)
@@ -159,23 +220,28 @@ public class Simulator extends JPanel {
 
 			for(int type : actors.getActors().keySet())
 			{
-				long t = System.currentTimeMillis();
 				for(Actor actor : actors.getActors().get(type))
 				{
 					actor.paintComponent(g2d);
 					actor.act(actors);
-//					actor.cleanUp(actors);
 				}
-				
-//				System.out.println(actors.getPlayerShips().size() +" "+ actors.getPlayerBullets().size() +" " +actors.getAlienShips().size() +" "+ actors.getAlienBullets().size());
-				//				if(System.currentTimeMillis() - t > 30)
-				//				System.out.println(type + " " +(System.currentTimeMillis() - t) + " ms");
 			}
 			cleanUp(actors);
 		}
 		else
 		{
-
+			g2d.setColor(Color.WHITE);
+			
+			for(int i = 0; i < slices.length; i++)
+			{
+				for(int j = 0; j < slices[0].length; j++)
+				{
+					Slice slice = slices[i][j];
+					g2d.drawRect((int)slice.getX(), (int)slice.getY(), (int)slice.getWidth(), (int)slice.getHeight());
+				}
+				
+			}
+			
 			g2d.setColor(Color.GRAY);
 
 			for(int i = 0; i < stars.size(); i++)
@@ -192,6 +258,7 @@ public class Simulator extends JPanel {
 			}
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 95));
+			
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
 			double width = sm.getWidth("PAUSED");
 			Dimension size = getSize();
@@ -214,18 +281,39 @@ public class Simulator extends JPanel {
 	
 	private void cleanUp(ActorSet actors)
 	{
+		List<Actor> delList = new ArrayList<Actor>();
 		for(int type : actors.getActors().keySet())
 		{
-			List<Object> delList = new ArrayList<Object>();
+			
 			for(Actor actor : actors.getActors().get(type))
 			{
-				if(actor.getX() < -10 || 
-						actor.getY() < -10 || 
-						actor.getX() > Simulator.getInstance().getWidth() + 10 || 
-						actor.getY() > Simulator.getInstance().getHeight() + 10)
-					delList.add(actor);
+				if(actor.getType() != Actor.PLAYER_SHIP)
+				{
+					if(actor.getX() < -40 || 
+							actor.getY() < -40 || 
+							actor.getX() > getWidth() + 40 || 
+							actor.getY() > getHeight() + 40)
+						delList.add(actor);
+				}
+				
+				
+				for(int type1 : actors.getActors().keySet())
+				{
+					for(Actor actor1 : actors.getActors().get(type1))
+					{
+						if(actor1.isAlien() ^ actor.isAlien())
+						{
+							if(Math.abs(actor1.getX() - actor.getX()) <= 20 
+									&&  Math.abs(actor1.getY() - actor.getY() ) <= 20)
+							{
+								delList.add(actor);
+								delList.add(actor1);
+							}
+						}
+					}
+				}
 			}
-			actors.getActors().get(type).removeAll(delList);
 		}
+		actors.removeActors(delList);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
+import simulationEngine.Slice;
 
 public abstract class Actor {
 
@@ -21,13 +22,13 @@ public abstract class Actor {
 	
 	protected boolean paused = false;
 
-	protected Random gen = new Random();
+	static protected Random gen = new Random();
 
 	public abstract void paintComponent(Graphics2D g);
 
 	public abstract int act(ActorSet actors);
 
-	public abstract int getSlice();
+	public abstract Slice getSlice();
 
 	public abstract int getType();
 
@@ -91,5 +92,5 @@ public abstract class Actor {
 			actors.getAlienShips().remove(this);
 	}
 	
-	
+	public abstract boolean isAlien();
 }

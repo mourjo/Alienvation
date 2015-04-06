@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import simulationEngine.ActorSet;
+import simulationEngine.Slice;
 
 public class AlienBullet extends Bullet {
 	public AlienBullet(int x, int y) {
@@ -25,9 +26,9 @@ public class AlienBullet extends Bullet {
 	}
 
 	@Override
-	public int getSlice() {
+	public Slice getSlice() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -39,6 +40,12 @@ public class AlienBullet extends Bullet {
 	public int act(ActorSet actors) {
 		x -= speedY;
 		return 0;
+	}
+	
+	@Override
+	public boolean isAlien()
+	{
+		return true;
 	}
 
 }

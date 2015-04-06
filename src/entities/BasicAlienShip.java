@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import simulationEngine.ActorSet;
 import simulationEngine.Simulator;
+import simulationEngine.Slice;
 
 public class BasicAlienShip extends AlienShip {
 	
@@ -66,9 +67,9 @@ public class BasicAlienShip extends AlienShip {
 	}
 
 	@Override
-	public int getSlice() {
+	public Slice getSlice() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 
@@ -76,7 +77,7 @@ public class BasicAlienShip extends AlienShip {
 	public int act(ActorSet actors) {
 		x -= speedX;
 		
-		if(gen.nextInt(1000) <= 5)
+		if(gen.nextFloat() <= firingProbability)
 			actors.getAlienBullets().add(new AlienBullet(x, y + 10, 1 + speedX));
 		
 		return 0;

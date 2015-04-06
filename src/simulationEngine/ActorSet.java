@@ -54,6 +54,15 @@ public class ActorSet {
 		allActors.put(Actor.ALIEN_SHIP, alienShips);
 	}
 	
+	void removeActors(List<?extends Actor> list)
+	{
+		playerShips.removeAll(list);
+		alienShips.removeAll(list);;
+		
+		playerBullets.removeAll(list);;
+		alienBullets.removeAll(list);;
+	}
+	
 	public Map<Integer, List<? extends Actor>> getActors()
 	{
 		return allActors;

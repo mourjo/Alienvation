@@ -25,8 +25,10 @@ public class ActorCreator {
 	
 	public void createBasicPlayerShip(List<? super BasicPlayerShip> basicPlayerShips, int count)
 	{
+		Slice[][] slices = Simulator.getInstance().getSlices();
+		
 		for(int i = 0; i < count; i++)
-			basicPlayerShips.add(new BasicPlayerShip());
+			basicPlayerShips.add(new BasicPlayerShip(slices[gen.nextInt(slices.length)][gen.nextInt(slices[0].length)]));
 	}
 	
 	public void createBasicAlienShip(List<? super BasicAlienShip> basicAlienShips, int count)
