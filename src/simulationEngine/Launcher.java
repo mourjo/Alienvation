@@ -1,12 +1,16 @@
 package simulationEngine;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -53,6 +57,16 @@ public class Launcher extends JFrame {
 			}
 			
 		});
+		
+		addMouseListener(new MouseAdapter(){
+
+			@Override
+			public void mouseClicked(MouseEvent m) {
+				Point pt = m.getPoint();
+				simulator.createPlayerShip(-1, (int)pt.getX(), (int)pt.getY()-50);
+			}
+
+			});
 		
 		
 		addComponentListener(new ComponentAdapter(){

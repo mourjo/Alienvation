@@ -19,12 +19,12 @@ public abstract class AlienShip extends Ship {
 	}
 	
 	@Override
-	public int getType() {
+	public final int getType() {
 		return Actor.ALIEN_SHIP;
 	}
 	
 	@Override
-	public boolean isAlien()
+	public final boolean isAlien()
 	{
 		return true;
 	}

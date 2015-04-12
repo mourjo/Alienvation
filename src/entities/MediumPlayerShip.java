@@ -20,12 +20,6 @@ public class MediumPlayerShip extends PlayerShip {
 	}
 
 	@Override
-	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int act(ActorSet actors) {
 		// TODO Auto-generated method stub
 		return 0;

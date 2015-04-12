@@ -14,38 +14,35 @@ public class BasicPlayerShip extends PlayerShip {
 	static BufferedImage image1 = null;
 	static final int displayBuffer = 20;
 	
+	static{
+		try {
+			image1 = ImageIO.read(BasicPlayerShip.class.getResource("/playerShip3.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public BasicPlayerShip(Slice s) 
 	{
 		super();
 		slice = s;
 		damage = 50;
-		firingProbability = 0.009;
 		
 		x = (int) (gen.nextInt((int) s.getWidth()) + s.getX());
 		y = (int) (gen.nextInt((int) s.getHeight()) + s.getY());
 		
-		if(image1 == null)
-			try {
-				image1 = ImageIO.read(getClass().getResource("/playerShip3.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 	}
 	
-	public BasicPlayerShip(int x, int y, int slice)
+	public BasicPlayerShip(int x, int y, Slice s)
 	{
 		super();
 		this.x = x;
 		this.y = y;
+		slice = s;
+		damage = 50;
 		
-		if(image1 == null)
-			try {
-				image1 = ImageIO.read(getClass().getResource("/playerShip3.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 	}
 
 	@Override
@@ -53,6 +50,11 @@ public class BasicPlayerShip extends PlayerShip {
 		
 		g2d.drawImage(image1, x, y, null);
 		
+	}
+	
+	public static int getWidth()
+	{
+		return (int)image1.getWidth();
 	}
 	
 	

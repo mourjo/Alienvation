@@ -12,7 +12,14 @@ public class PlayerBullet extends Bullet {
 	{
 		x = posX;
 		y = posY;
-		
+		power = 20;
+	}
+	
+	public PlayerBullet(int posX, int posY, int pow)
+	{
+		x = posX;
+		y = posY;
+		power = pow;
 	}
 
 	@Override

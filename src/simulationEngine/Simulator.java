@@ -12,7 +12,9 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ import javax.swing.JPanel;
 import entities.Actor;
 import entities.AlienBullet;
 import entities.AlienShip;
+import entities.BasicPlayerShip;
 import entities.Bullet;
 import entities.PlayerBullet;
 import entities.PlayerShip;
@@ -52,35 +55,28 @@ public class Simulator extends JPanel {
 		actorFactory = ActorCreator.getInstance();
 		gen = new Random();
 		slices = new Slice[numSlices][numSlices];
-		/*try {
-			image = ImageIO.read(getClass().getResource("/earth.jpg"));
-//			image = ImageIO.read(getClass().getResourceAsStream("/milkyWay.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
-	
+
 	@Override
 	public void setSize(Dimension d)
 	{
 		super.setSize(d);
-		
+
 		double sliceHeight = (double)d.getHeight()/numSlices;
 		double sliceWidth = (double)d.getWidth()/numSlices;
-		
+
 		for(int i = 0; i < slices.length; i++)
 		{
 			for(int j = 0; j < slices[i].length; j++)
 				slices[i][j].setValues(i*sliceWidth,j*sliceHeight,sliceWidth,sliceHeight); 
 		}
-		
+
 		stars = new ArrayList<Point>();
 		for (int i = 0; i < 500; i++)
 			stars.add(new Point(gen.nextInt((int)d.getWidth())*2, gen.nextInt((int)d.getHeight())*2));
-			
+
 	}
-	
+
 	public void setNumberOfSlices(int n) //n x n
 	{
 		numSlices = n;
@@ -88,22 +84,22 @@ public class Simulator extends JPanel {
 		clear();
 		init(getSize().width, getSize().height);
 	}
-	
+
 	public ActorSet getActors()
 	{
 		return actors;
 	}
-	
+
 	public int numberOfSlices()
 	{
 		return numSlices;
 	}
-	
+
 	public Slice[][] getSlices()
 	{
 		return slices;
 	}
-	
+
 	public void togglePause()
 	{
 		paused = !paused;
@@ -117,19 +113,18 @@ public class Simulator extends JPanel {
 	void init(int canvasWidth, int canvasHeight)
 	{
 		initial = false;
-		
+
 		double sliceHeight = (double)canvasHeight/numSlices;
 		double sliceWidth = (double)canvasWidth/numSlices;
-		
+
 		for(int i = 0; i < slices.length; i++)
 		{
 			for(int j = 0; j < slices[i].length; j++)
 				slices[i][j] = new Slice(i*sliceWidth,j*sliceHeight,sliceWidth,sliceHeight); 
 		}
-		
+
 		setSize(new Dimension(canvasWidth, canvasHeight));
-		
-		actorFactory.createBasicPlayerShip(getPlayerShips(), 10);
+
 		image = null;
 		paused = false;
 	}
@@ -140,13 +135,30 @@ public class Simulator extends JPanel {
 			_singleton = new Simulator();
 		return _singleton; 
 	}
-	
+
 	public void clear()
 	{
 		actors.getPlayerShips().clear();
 		actors.getPlayerBullets().clear();
 		actors.getAlienShips().clear();
 		actors.getAlienBullets().clear();
+		score = 0;
+	}
+	
+	public void createPlayerShip(int type, int xPt, int yPt)
+	{
+		Slice s = null;
+		xPt = xPt - BasicPlayerShip.getWidth()/2;
+			
+		for(int i = 0; i < slices.length; i++)
+			for(int j = 0; j < slices[i].length; j++)
+				if(xPt >= slices[i][j].getX() && 
+						xPt < slices[i][j].getX() + slices[i][j].getWidth() &&
+						yPt >= slices[i][j].getY() && 
+						yPt < slices[i][j].getY() + slices[i][j].getHeight())
+					s = slices[i][j];
+		
+		actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
 	}
 
 	public List<PlayerShip> getPlayerShips()
@@ -183,7 +195,7 @@ public class Simulator extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		this.setBackground(Color.BLACK);
-		
+
 		if(initial)
 		{
 			g2d.setColor(Color.WHITE);
@@ -203,7 +215,7 @@ public class Simulator extends JPanel {
 		else if(!paused)
 		{
 			g2d.setColor(Color.WHITE);
-			
+
 			for(int i = 0; i < slices.length; i++)
 			{
 				for(int j = 0; j < slices[0].length; j++)
@@ -211,9 +223,9 @@ public class Simulator extends JPanel {
 					Slice slice = slices[i][j];
 					g2d.drawRect((int)slice.getX(), (int)slice.getY(), (int)slice.getWidth(), (int)slice.getHeight());
 				}
-				
+
 			}
-			
+
 			g2d.setColor(Color.GRAY);
 
 			for(int i = 0; i < stars.size(); i++)
@@ -228,11 +240,18 @@ public class Simulator extends JPanel {
 				}
 			}
 			cleanUp(actors);
+			
+			g2d.setColor(Color.RED);
+			g2d.setFont(new Font("Arial", Font.BOLD, 20));
+			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
+			double width = sm.getWidth("Score: " + score);
+			Dimension size = getSize();
+			g2d.drawString("Score: " + score, (float)(size.width/2d - width/2d), (float)(20));
 		}
 		else
 		{
 			g2d.setColor(Color.WHITE);
-			
+
 			for(int i = 0; i < slices.length; i++)
 			{
 				for(int j = 0; j < slices[0].length; j++)
@@ -240,9 +259,9 @@ public class Simulator extends JPanel {
 					Slice slice = slices[i][j];
 					g2d.drawRect((int)slice.getX(), (int)slice.getY(), (int)slice.getWidth(), (int)slice.getHeight());
 				}
-				
+
 			}
-			
+
 			g2d.setColor(Color.GRAY);
 
 			for(int i = 0; i < stars.size(); i++)
@@ -259,91 +278,111 @@ public class Simulator extends JPanel {
 			}
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 95));
-			
+
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
 			double width = sm.getWidth("PAUSED");
 			Dimension size = getSize();
 			g2d.drawString("PAUSED", (float)(size.width/2d - width/2d), (float)(size.height/2d ));
 
 		}
-		
-		 if(frameCount++ == frames)
-		 {
-			 framerate = (int) (((double)frameCount/(System.nanoTime() - time)) * Math.pow(10,9));
-			 time = System.nanoTime();
-			 
-			 frameCount = 0;
-		 }
-		 g2d.setColor(Color.RED);
-		 g2d.setFont(new Font("Arial", Font.BOLD, 20));
-		 g2d.drawString("Frame rate: " + framerate, 800, 20);
+
+		if(frameCount++ == frames)
+		{
+			framerate = (int) (((double)frameCount/(System.nanoTime() - time)) * Math.pow(10,9));
+			time = System.nanoTime();
+
+			frameCount = 0;
+		}
+		g2d.setColor(Color.RED);
+		g2d.setFont(new Font("Arial", Font.BOLD, 20));
+		g2d.drawString("Frame rate: " + framerate, 800, 20);
 
 	}
-	
+
 	private void cleanUp(ActorSet actors)
 	{
 		List<Actor> delList = new ArrayList<Actor>();
 		for(int type : actors.getActors().keySet())
 		{
-			
 			for(Actor actor : actors.getActors().get(type))
 			{
-				if(actor.getType() != Actor.PLAYER_SHIP)
+				if(type == Actor.ALIEN_SHIP && actor.getX() < -40)
+					score -= 10;
+				if(type != Actor.PLAYER_SHIP)
 				{
 					if(actor.getX() < -40 || 
 							actor.getY() < -40 || 
 							actor.getX() > getWidth() + 40 || 
 							actor.getY() > getHeight() + 40)
+					{
 						delList.add(actor);
+						continue;
+					}
 				}
-				
-				
+
+
+
 				for(int type1 : actors.getActors().keySet())
 				{
 					for(Actor actor1 : actors.getActors().get(type1))
 					{
 						if(actor1.isAlien() ^ actor.isAlien())
 						{
-							if(Math.abs(actor1.getX() - actor.getX()) <= 20 
+							if(Math.abs(actor1.getX() - actor.getX()) <= 20
 									&&  Math.abs(actor1.getY() - actor.getY() ) <= 20)
 							{
-								if(actor1.getType() == Actor.PLAYER_SHIP)
+
+								if(type1 == Actor.PLAYER_SHIP)
 								{
-									if(actor.getType() == Actor.ALIEN_BULLET)
+									if(type == Actor.ALIEN_BULLET)
 									{
+										//player ship vs alien bullet
 										if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
+										{
 											delList.add(actor1);
+											score -= 20;
+										}
 										delList.add(actor);
 									}
-									
-									else
+
+									else	//player ship vs alien ship
 									{
-										if(((Ship)actor1).reduceLife(((Ship)actor).getDamageOnCollision()))
-											delList.add(actor1);
+										Ship playerShip = (Ship)actor1;
+										Ship alienShip = (Ship)actor;
+										if(playerShip.hasNotBeenAttacked(alienShip) && playerShip.reduceLife(alienShip.getDamageOnCollision()))
+										{
+											playerShip.getAttackers().clear();
+											delList.add(playerShip);
+											score -= 20;
+										}
 										
-										
-										if(((Ship)actor).reduceLife(((Ship)actor1).getDamageOnCollision()))
-											delList.add(actor);
+										if(alienShip.hasNotBeenAttacked(playerShip) && alienShip.reduceLife(playerShip.getDamageOnCollision()))
+										{
+											alienShip.getAttackers().clear();
+											delList.add(alienShip);
+											score += 10;
+										}
 									}
+
+								}
+
+								else if(type1 == Actor.ALIEN_SHIP && type == Actor.PLAYER_BULLET)
+								{
+									//alien ship vs player bullet
+									if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
+									{
+										delList.add(actor1);
+										score += 10;
+									}
+									delList.add(actor);
 								}
 								
-								else if(actor1.getType() == Actor.ALIEN_SHIP)
+								else if((type1 == Actor.PLAYER_BULLET || type1 == Actor.ALIEN_BULLET) && 
+										(type == Actor.ALIEN_BULLET || type == Actor.PLAYER_BULLET))
 								{
-									if(actor.getType() == Actor.PLAYER_BULLET)
-									{
-										if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
-											delList.add(actor1);
-										delList.add(actor);
-									}
-									else
-									{
-										if(((Ship)actor1).reduceLife(((Ship)actor).getDamageOnCollision()))
-											delList.add(actor1);
-										
-										
-										if(((Ship)actor).reduceLife(((Ship)actor1).getDamageOnCollision()))
-											delList.add(actor);
-									}
+									//clash of bullets, annihilate each other
+									delList.add(actor1);
+									delList.add(actor);
 								}
 							}
 						}
@@ -351,6 +390,7 @@ public class Simulator extends JPanel {
 				}
 			}
 		}
+
 		actors.removeActors(delList);
 	}
 }
