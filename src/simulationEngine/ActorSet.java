@@ -2,6 +2,7 @@ package simulationEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -22,7 +23,7 @@ public class ActorSet {
 	private List<PlayerBullet> playerBullets;
 	private List<AlienBullet> alienBullets;
 	
-	private Map<Integer, List<? extends Actor>> allActors;
+	private Hashtable<Integer, List<? extends Actor>> allActors;
 	
 	/*ActorSet()
 	{
@@ -47,14 +48,14 @@ public class ActorSet {
 		playerBullets = new ArrayList<PlayerBullet>();
 		alienBullets = new ArrayList<AlienBullet>();
 		
-		allActors = new HashMap<Integer, List<? extends Actor>>();
+		allActors = new Hashtable<Integer, List<? extends Actor>>();
 		allActors.put(Actor.PLAYER_BULLET, playerBullets);
 		allActors.put(Actor.ALIEN_BULLET, alienBullets);
 		allActors.put(Actor.PLAYER_SHIP, playerShips);
 		allActors.put(Actor.ALIEN_SHIP, alienShips);
 	}
 	
-	void removeActors(List<?extends Actor> list)
+	synchronized void removeActors(List<?extends Actor> list)
 	{
 		playerShips.removeAll(list);
 		alienShips.removeAll(list);;
@@ -63,9 +64,19 @@ public class ActorSet {
 		alienBullets.removeAll(list);;
 	}
 	
-	public Map<Integer, List<? extends Actor>> getActors()
+	public synchronized Hashtable<Integer, List<? extends Actor>> getActors()
 	{
 		return allActors;
+	}
+	
+	public List<Actor> getActorList()
+	{
+		List<Actor> t = new ArrayList<Actor>();
+		t.addAll(playerBullets);
+		t.addAll(alienBullets);
+		t.addAll(playerShips);
+		t.addAll(alienShips);
+		return t;
 	}
 	
 	public List<Ship> getShips()

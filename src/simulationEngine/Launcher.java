@@ -153,7 +153,7 @@ public class Launcher extends JFrame {
 		{
 			Thread.sleep(15);
 			simulator.repaint();
-//			simulator.refresh();
+			simulator.refresh();
 			
 		}
 	}

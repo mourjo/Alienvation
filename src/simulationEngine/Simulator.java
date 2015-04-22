@@ -145,10 +145,13 @@ public class Simulator extends JPanel {
 
 	public void clear()
 	{
-		actors.getPlayerShips().clear();
-		actors.getPlayerBullets().clear();
-		actors.getAlienShips().clear();
-		actors.getAlienBullets().clear();
+		synchronized(actors)
+		{
+			actors.getPlayerShips().clear();
+			actors.getPlayerBullets().clear();
+			actors.getAlienShips().clear();
+			actors.getAlienBullets().clear();
+		}
 		score = 0;
 	}
 
@@ -172,8 +175,10 @@ public class Simulator extends JPanel {
 					}
 				}
 			}
-
-			actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
+			synchronized(actors)
+			{
+				actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
+			}
 		}
 
 	}
@@ -200,8 +205,11 @@ public class Simulator extends JPanel {
 
 	public void createAlienWave()
 	{
-		if(!paused && actors.getAlienShips().size() == 0)
-			actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
+		synchronized(actors)
+		{
+			if(!paused && actors.getAlienShips().size() == 0)
+				actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
+		}
 	}
 
 	public void refresh()
@@ -209,17 +217,18 @@ public class Simulator extends JPanel {
 
 		if(!paused)
 		{
-
-
-
-			for(int type : actors.getActors().keySet())
+			synchronized(actors)
 			{
-				for(Actor actor : actors.getActors().get(type))
+				for(int type : actors.getActors().keySet())
 				{
-					actor.act(actors);
+					for(Actor actor : actors.getActors().get(type))
+					{
+						actor.act(actors);
+					}
 				}
+			
+				cleanUp(actors);
 			}
-			cleanUp(actors);
 
 		}
 
@@ -268,16 +277,15 @@ public class Simulator extends JPanel {
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 
-			for(int type : actors.getActors().keySet())
-			{
-				for(Actor actor : actors.getActors().get(type))
-				{
-					actor.paintComponent(g2d);
-					actor.act(actors);
-				}
-			}
-			cleanUp(actors);
+//			for(int type : actors.getActors().keySet())
+//				for(Actor actor : actors.getActors().get(type))
+//					actor.paintComponent(g2d);
 
+			
+			for(Actor actor : actors.getActorList())
+				actor.paintComponent(g2d);
+			
+			
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
@@ -304,15 +312,20 @@ public class Simulator extends JPanel {
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 
-			for(int type : actors.getActors().keySet())
-			{
-				for(Actor actor : actors.getActors().get(type))
-				{
-					actor.pause();
-					actor.paintComponent(g2d);
-					actor.unPause();
-				}
-			}
+//			for(int type : actors.getActors().keySet())
+//			{
+//				for(Actor actor : actors.getActors().get(type))
+//				{
+////					actor.pause();
+//					actor.paintComponent(g2d);
+////					actor.unPause();
+//				}
+//			}
+			
+			for(Actor actor : actors.getActorList())
+				actor.paintComponent(g2d);
+			
+			
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 95));
 
@@ -335,7 +348,7 @@ public class Simulator extends JPanel {
 		g2d.drawString("Frame rate: " + framerate, 800, 20);
 
 	}
-	private void cleanUp(ActorSet actors)
+	private synchronized void cleanUp(ActorSet actors)
 	{
 		List<Actor> delList = new ArrayList<Actor>();
 		for(int type : actors.getActors().keySet())
