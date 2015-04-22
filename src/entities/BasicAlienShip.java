@@ -56,6 +56,7 @@ public class BasicAlienShip extends AlienShip {
 		image = image1;
 		firingProbability = 0.009;
 		changeColorInterval = gen.nextInt(30) + 50;
+//		speedX = gen.nextInt(10) + 3;
 		
 //		if(image1 == null)
 //			try {

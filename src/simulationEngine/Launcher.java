@@ -1,6 +1,7 @@
 package simulationEngine;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,16 +28,10 @@ public class Launcher extends JFrame {
 	Launcher(String name)
 	{
 		super(name);
+		setResizable(false);
+		setSize(960, 600);
 		buildMenus();
-		simulator = Simulator.getInstance();
-		setSize(960, 660);
-//		setSize(560, 400);
-		setVisible(true);
-		setLocationRelativeTo(null);		
 		
-		add(simulator);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		simulator.init(getWidth(), getHeight());
 		
 		
 		addKeyListener(new KeyAdapter(){
@@ -62,22 +57,46 @@ public class Launcher extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent m) {
-				Point pt = m.getPoint();
-				simulator.createPlayerShip(-1, (int)pt.getX(), (int)pt.getY()-50);
+				if(simulator.isInitialized())
+				{
+					Point pt = m.getPoint();
+					System.out.println((int)pt.getX() + ", " + ((int)pt.getY()-50));
+					if(((int)pt.getY()-50) >= 0)
+						simulator.createPlayerShip(-1, (int)pt.getX(), (int)pt.getY()-50);
+					if(simulator.getSize().height == 548)
+						simulator.setSize(simulator.getSize());
+				}
 			}
 
 			});
 		
 		
-		addComponentListener(new ComponentAdapter(){
-
-			@Override
-			public void componentResized(ComponentEvent ev) {
-				simulator.setSize(((Component)ev.getSource()).getSize());
-			}
-			
-		});
+//		addComponentListener(new ComponentAdapter(){
+//
+//			@Override
+//			public void componentResized(ComponentEvent ev) {
+//				setSize(((Component)ev.getSource()).getSize());
+//			}
+//			
+//		});
+		
+		
+		simulator = Simulator.getInstance();
+		
+//		setSize(560, 400);
+		setVisible(true);
+		setLocationRelativeTo(null);		
+		simulator.init(getComponents()[0].getWidth(), getComponents()[0].getHeight());
+		add(simulator);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
+//	@Override
+//	public void setSize(Dimension d)
+//	{
+//		super.setSize(d);
+//		simulator.setSize(getComponents()[0].getSize());
+//	}
 	
 	void buildMenus()
 	{
@@ -134,13 +153,15 @@ public class Launcher extends JFrame {
 		{
 			Thread.sleep(15);
 			simulator.repaint();
+//			simulator.refresh();
 			
 		}
 	}
 	
 	public static void main(String args[]) throws InterruptedException
 	{
-		new Launcher("Alienvation").launch();
+		Launcher xlaunch = new Launcher("Alienvation");
+		xlaunch.launch();
 	}
 	
 	class RestartListener implements ActionListener
@@ -152,7 +173,9 @@ public class Launcher extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+//			System.out.println(simulator.getSize());
 			simulator.setNumberOfSlices(cross);
+//			System.out.println(simulator.getSize());
 			
 		}
 		

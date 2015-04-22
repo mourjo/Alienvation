@@ -1,10 +1,10 @@
 package simulationEngine;
 
 public class Slice {
-	private double x, y;
-	private double height, width;
+	private int x, y;
+	private int height, width;
 	
-	public Slice(double x, double y, double w, double h)
+	public Slice(int x, int y, int w, int h)
 	{
 		this.x = x;
 		this.y = y;
@@ -12,7 +12,7 @@ public class Slice {
 		width = w;
 	}
 	
-	public void setValues(double x, double y, double w, double h)
+	public void setValues(int x, int y, int w, int h)
 	{
 		this.x = x;
 		this.y = y;
@@ -38,5 +38,11 @@ public class Slice {
 	public double getWidth()
 	{
 		return width;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return (int)x+","+(int)y;
 	}
 }

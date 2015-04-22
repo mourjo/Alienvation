@@ -39,6 +39,8 @@ public class BasicPlayerShip extends PlayerShip {
 		super();
 		this.x = x;
 		this.y = y;
+		if(s==null)
+			throw new NullPointerException();
 		slice = s;
 		damage = 50;
 		
@@ -65,7 +67,11 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
-		
+//		if(slice == null)
+//		{
+//			System.out.println(slice);
+//			return -1;
+//		}
 		if(x >= Math.min(slice.getX() + slice.getWidth(), Simulator.getInstance().getWidth()) || x <= slice.getX())
 				x = (int) (gen.nextInt((int)slice.getWidth()) + slice.getX());
 		

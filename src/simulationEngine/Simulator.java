@@ -62,8 +62,8 @@ public class Simulator extends JPanel {
 	{
 		super.setSize(d);
 
-		double sliceHeight = (double)d.getHeight()/numSlices;
-		double sliceWidth = (double)d.getWidth()/numSlices;
+		int sliceHeight = getSize().height/numSlices;
+		int sliceWidth = getSize().width/numSlices;
 
 		for(int i = 0; i < slices.length; i++)
 		{
@@ -77,11 +77,17 @@ public class Simulator extends JPanel {
 
 	}
 
+	public boolean isInitialized()
+	{
+		return !(actors == null);
+	}
+
 	public void setNumberOfSlices(int n) //n x n
 	{
 		numSlices = n;
 		slices = new Slice[numSlices][numSlices];
 		clear();
+		System.out.println(getSize().width + ", " + getSize().height);
 		init(getSize().width, getSize().height);
 	}
 
@@ -114,8 +120,8 @@ public class Simulator extends JPanel {
 	{
 		initial = false;
 
-		double sliceHeight = (double)canvasHeight/numSlices;
-		double sliceWidth = (double)canvasWidth/numSlices;
+		int sliceHeight = canvasHeight/numSlices;
+		int sliceWidth = canvasWidth/numSlices;
 
 		for(int i = 0; i < slices.length; i++)
 		{
@@ -127,6 +133,7 @@ public class Simulator extends JPanel {
 
 		image = null;
 		paused = false;
+		System.out.println(getSize().width + ", " + getSize().height);
 	}
 
 	static public Simulator getInstance()
@@ -144,21 +151,31 @@ public class Simulator extends JPanel {
 		actors.getAlienBullets().clear();
 		score = 0;
 	}
-	
+
 	public void createPlayerShip(int type, int xPt, int yPt)
 	{
-		Slice s = null;
-		xPt = xPt - BasicPlayerShip.getWidth()/2;
-			
-		for(int i = 0; i < slices.length; i++)
-			for(int j = 0; j < slices[i].length; j++)
-				if(xPt >= slices[i][j].getX() && 
-						xPt < slices[i][j].getX() + slices[i][j].getWidth() &&
-						yPt >= slices[i][j].getY() && 
-						yPt < slices[i][j].getY() + slices[i][j].getHeight())
-					s = slices[i][j];
-		
-		actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
+		if(!paused)
+		{
+			Slice s = null;
+			xPt = Math.max(1,xPt - BasicPlayerShip.getWidth()/2);
+			for(int i = 0; i < slices.length; i++)
+			{
+				for(int j = 0; j < slices[i].length; j++)
+				{
+					if(xPt >= slices[i][j].getX() && 
+							xPt < slices[i][j].getX() + slices[i][j].getWidth() &&
+							yPt >= slices[i][j].getY() && 
+							yPt < slices[i][j].getY() + slices[i][j].getHeight())
+					{
+						s = slices[i][j];
+						break;
+					}
+				}
+			}
+
+			actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
+		}
+
 	}
 
 	public List<PlayerShip> getPlayerShips()
@@ -187,6 +204,26 @@ public class Simulator extends JPanel {
 			actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
 	}
 
+	public void refresh()
+	{
+
+		if(!paused)
+		{
+
+
+
+			for(int type : actors.getActors().keySet())
+			{
+				for(Actor actor : actors.getActors().get(type))
+				{
+					actor.act(actors);
+				}
+			}
+			cleanUp(actors);
+
+		}
+
+	}
 
 	@Override
 	public void paintComponent(Graphics g)
@@ -218,7 +255,7 @@ public class Simulator extends JPanel {
 
 			for(int i = 0; i < slices.length; i++)
 			{
-				for(int j = 0; j < slices[0].length; j++)
+				for(int j = 0; j < slices[i].length; j++)
 				{
 					Slice slice = slices[i][j];
 					g2d.drawRect((int)slice.getX(), (int)slice.getY(), (int)slice.getWidth(), (int)slice.getHeight());
@@ -240,7 +277,7 @@ public class Simulator extends JPanel {
 				}
 			}
 			cleanUp(actors);
-			
+
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
@@ -298,7 +335,6 @@ public class Simulator extends JPanel {
 		g2d.drawString("Frame rate: " + framerate, 800, 20);
 
 	}
-
 	private void cleanUp(ActorSet actors)
 	{
 		List<Actor> delList = new ArrayList<Actor>();
@@ -355,7 +391,7 @@ public class Simulator extends JPanel {
 											delList.add(playerShip);
 											score -= 20;
 										}
-										
+
 										if(alienShip.hasNotBeenAttacked(playerShip) && alienShip.reduceLife(playerShip.getDamageOnCollision()))
 										{
 											alienShip.getAttackers().clear();
@@ -376,7 +412,7 @@ public class Simulator extends JPanel {
 									}
 									delList.add(actor);
 								}
-								
+
 								else if((type1 == Actor.PLAYER_BULLET || type1 == Actor.ALIEN_BULLET) && 
 										(type == Actor.ALIEN_BULLET || type == Actor.PLAYER_BULLET))
 								{
