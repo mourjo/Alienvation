@@ -147,10 +147,7 @@ public class Simulator extends JPanel {
 	{
 		synchronized(actors)
 		{
-			actors.getPlayerShips().clear();
-			actors.getPlayerBullets().clear();
-			actors.getAlienShips().clear();
-			actors.getAlienBullets().clear();
+			actors.getActorList().clear();
 		}
 		score = 0;
 	}
@@ -175,41 +172,15 @@ public class Simulator extends JPanel {
 					}
 				}
 			}
-			synchronized(actors)
-			{
-				actorFactory.createBasicPlayerShip(actors.getPlayerShips(), xPt, yPt, s);
-			}
+			actorFactory.createBasicPlayerShip(actors.getActorList(), xPt, yPt, s);
 		}
 
-	}
-
-	public List<PlayerShip> getPlayerShips()
-	{
-		return actors.getPlayerShips();
-	}
-
-	public List<PlayerBullet> getPlayerBullets()
-	{
-		return actors.getPlayerBullets();
-	}
-
-	public List<AlienShip> getAlienShips()
-	{
-		return actors.getAlienShips();
-	}
-
-	public List<AlienBullet> getAlienBullets()
-	{
-		return actors.getAlienBullets();
 	}
 
 	public void createAlienWave()
 	{
-		synchronized(actors)
-		{
-			if(!paused && actors.getAlienShips().size() == 0)
-				actorFactory.createBasicAlienShip(actors.getAlienShips(), 10);
-		}
+		if(!paused && actors.getAlienShipCount() == 0)
+			actorFactory.createBasicAlienShip(actors.getActorList(), 10);
 	}
 
 	public void refresh()
@@ -217,19 +188,16 @@ public class Simulator extends JPanel {
 
 		if(!paused)
 		{
-			synchronized(actors)
-			{
-				for(int type : actors.getActors().keySet())
-				{
-					for(Actor actor : actors.getActors().get(type))
-					{
-						actor.act(actors);
-					}
-				}
-			
-				cleanUp(actors);
-			}
+			for(Actor actor : actors.getActorList())
+				actor.act(actors);
 
+			cleanUp(actors);
+
+		}
+		else
+		{
+			for(Actor actor : actors.getActorList())
+				actor.pause();
 		}
 
 	}
@@ -277,15 +245,10 @@ public class Simulator extends JPanel {
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 
-//			for(int type : actors.getActors().keySet())
-//				for(Actor actor : actors.getActors().get(type))
-//					actor.paintComponent(g2d);
-
-			
 			for(Actor actor : actors.getActorList())
 				actor.paintComponent(g2d);
-			
-			
+
+
 			g2d.setColor(Color.RED);
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			DrawStringMeasurement sm = new DrawStringMeasurement(g2d);
@@ -312,20 +275,10 @@ public class Simulator extends JPanel {
 			for(int i = 0; i < stars.size(); i++)
 				g2d.fillOval((int)stars.get(i).getX(),(int)stars.get(i).getY(), 2, 2);
 
-//			for(int type : actors.getActors().keySet())
-//			{
-//				for(Actor actor : actors.getActors().get(type))
-//				{
-////					actor.pause();
-//					actor.paintComponent(g2d);
-////					actor.unPause();
-//				}
-//			}
-			
 			for(Actor actor : actors.getActorList())
 				actor.paintComponent(g2d);
-			
-			
+
+
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font("Arial", Font.BOLD, 95));
 
@@ -351,89 +304,85 @@ public class Simulator extends JPanel {
 	private synchronized void cleanUp(ActorSet actors)
 	{
 		List<Actor> delList = new ArrayList<Actor>();
-		for(int type : actors.getActors().keySet())
+		for(Actor actor : actors.getActorList())
 		{
-			for(Actor actor : actors.getActors().get(type))
+			int type = actor.getType();
+			if(type == Actor.ALIEN_SHIP && actor.getX() < -40)
+				score -= 10;
+			if(type != Actor.PLAYER_SHIP)
 			{
-				if(type == Actor.ALIEN_SHIP && actor.getX() < -40)
-					score -= 10;
-				if(type != Actor.PLAYER_SHIP)
+				if(actor.getX() < -40 || 
+						actor.getY() < -40 || 
+						actor.getX() > getWidth() + 40 || 
+						actor.getY() > getHeight() + 40)
 				{
-					if(actor.getX() < -40 || 
-							actor.getY() < -40 || 
-							actor.getX() > getWidth() + 40 || 
-							actor.getY() > getHeight() + 40)
-					{
-						delList.add(actor);
-						continue;
-					}
+					delList.add(actor);
+					continue;
 				}
+			}
 
 
 
-				for(int type1 : actors.getActors().keySet())
+			for(Actor actor1 : actors.getActorList())
+			{
+				int type1 = actor1.getType();
+				if(actor1.isAlien() ^ actor.isAlien())
 				{
-					for(Actor actor1 : actors.getActors().get(type1))
+					if(Math.abs(actor1.getX() - actor.getX()) <= 20
+							&&  Math.abs(actor1.getY() - actor.getY() ) <= 20)
 					{
-						if(actor1.isAlien() ^ actor.isAlien())
+
+						if(type1 == Actor.PLAYER_SHIP)
 						{
-							if(Math.abs(actor1.getX() - actor.getX()) <= 20
-									&&  Math.abs(actor1.getY() - actor.getY() ) <= 20)
+							if(type == Actor.ALIEN_BULLET)
 							{
-
-								if(type1 == Actor.PLAYER_SHIP)
+								//player ship vs alien bullet
+								if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
 								{
-									if(type == Actor.ALIEN_BULLET)
-									{
-										//player ship vs alien bullet
-										if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
-										{
-											delList.add(actor1);
-											score -= 20;
-										}
-										delList.add(actor);
-									}
-
-									else	//player ship vs alien ship
-									{
-										Ship playerShip = (Ship)actor1;
-										Ship alienShip = (Ship)actor;
-										if(playerShip.hasNotBeenAttacked(alienShip) && playerShip.reduceLife(alienShip.getDamageOnCollision()))
-										{
-											playerShip.getAttackers().clear();
-											delList.add(playerShip);
-											score -= 20;
-										}
-
-										if(alienShip.hasNotBeenAttacked(playerShip) && alienShip.reduceLife(playerShip.getDamageOnCollision()))
-										{
-											alienShip.getAttackers().clear();
-											delList.add(alienShip);
-											score += 10;
-										}
-									}
-
-								}
-
-								else if(type1 == Actor.ALIEN_SHIP && type == Actor.PLAYER_BULLET)
-								{
-									//alien ship vs player bullet
-									if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
-									{
-										delList.add(actor1);
-										score += 10;
-									}
-									delList.add(actor);
-								}
-
-								else if((type1 == Actor.PLAYER_BULLET || type1 == Actor.ALIEN_BULLET) && 
-										(type == Actor.ALIEN_BULLET || type == Actor.PLAYER_BULLET))
-								{
-									//clash of bullets, annihilate each other
 									delList.add(actor1);
-									delList.add(actor);
+									score -= 20;
+								}
+								delList.add(actor);
+							}
+
+							else	//player ship vs alien ship
+							{
+								Ship playerShip = (Ship)actor1;
+								Ship alienShip = (Ship)actor;
+								if(playerShip.hasNotBeenAttacked(alienShip) && playerShip.reduceLife(alienShip.getDamageOnCollision()))
+								{
+									playerShip.getAttackers().clear();
+									delList.add(playerShip);
+									score -= 20;
+								}
+
+								if(alienShip.hasNotBeenAttacked(playerShip) && alienShip.reduceLife(playerShip.getDamageOnCollision()))
+								{
+									alienShip.getAttackers().clear();
+									delList.add(alienShip);
+									score += 10;
 								}
 							}
+
+						}
+
+						else if(type1 == Actor.ALIEN_SHIP && type == Actor.PLAYER_BULLET)
+						{
+							//alien ship vs player bullet
+							if(((Ship)actor1).reduceLife(((Bullet)actor).getPower()))
+							{
+								delList.add(actor1);
+								score += 10;
+							}
+							delList.add(actor);
+						}
+
+						else if((type1 == Actor.PLAYER_BULLET || type1 == Actor.ALIEN_BULLET) && 
+								(type == Actor.ALIEN_BULLET || type == Actor.PLAYER_BULLET))
+						{
+							//clash of bullets, annihilate each other
+							delList.add(actor1);
+							delList.add(actor);
 						}
 					}
 				}

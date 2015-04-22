@@ -82,7 +82,7 @@ public class BasicPlayerShip extends PlayerShip {
 		y = y + direction*speedY;
 		
 		if(gen.nextFloat() <= firingProbability)
-			actors.getPlayerBullets().add(new PlayerBullet(x + 70, y + 15));
+			actors.getActorList().add(new PlayerBullet(x + 70, y + 15));
 		
 		return 0;
 	}

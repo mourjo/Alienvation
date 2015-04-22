@@ -1,117 +1,37 @@
 package simulationEngine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import entities.Actor;
-import entities.AlienBullet;
-import entities.AlienShip;
-import entities.Bullet;
-import entities.PlayerBullet;
-import entities.PlayerShip;
-import entities.Ship;
 
 public class ActorSet {
 
-	private List<PlayerShip> playerShips;
-	private List<AlienShip> alienShips;
-	
-	private List<PlayerBullet> playerBullets;
-	private List<AlienBullet> alienBullets;
-	
-	private Hashtable<Integer, List<? extends Actor>> allActors;
-	
-	/*ActorSet()
-	{
-		playerShips = new CopyOnWriteArrayList<PlayerShip>(new ArrayList<PlayerShip>());
-		alienShips = new CopyOnWriteArrayList<AlienShip>(new ArrayList<AlienShip>());
-
-		playerBullets = new CopyOnWriteArrayList<PlayerBullet>(new ArrayList<PlayerBullet>());
-		alienBullets = new CopyOnWriteArrayList<AlienBullet>(new ArrayList<AlienBullet>());
-		
-		allActors = new HashMap<Integer, List<? extends Actor>>();
-		allActors.put(Actor.PLAYER_BULLET, playerBullets);
-		allActors.put(Actor.ALIEN_BULLET, alienBullets);
-		allActors.put(Actor.PLAYER_SHIP, playerShips);
-		allActors.put(Actor.ALIEN_SHIP, alienShips);
-	}*/
+	public List<Actor> allActorList;
 	
 	ActorSet()
 	{
-		playerShips = new ArrayList<PlayerShip>();
-		alienShips = new ArrayList<AlienShip>();
-
-		playerBullets = new ArrayList<PlayerBullet>();
-		alienBullets = new ArrayList<AlienBullet>();
-		
-		allActors = new Hashtable<Integer, List<? extends Actor>>();
-		allActors.put(Actor.PLAYER_BULLET, playerBullets);
-		allActors.put(Actor.ALIEN_BULLET, alienBullets);
-		allActors.put(Actor.PLAYER_SHIP, playerShips);
-		allActors.put(Actor.ALIEN_SHIP, alienShips);
+		allActorList = new CopyOnWriteArrayList<Actor>(new ArrayList<Actor>());
 	}
 	
 	synchronized void removeActors(List<?extends Actor> list)
 	{
-		playerShips.removeAll(list);
-		alienShips.removeAll(list);;
-		
-		playerBullets.removeAll(list);;
-		alienBullets.removeAll(list);;
-	}
-	
-	public synchronized Hashtable<Integer, List<? extends Actor>> getActors()
-	{
-		return allActors;
+		allActorList.removeAll(list);
 	}
 	
 	public List<Actor> getActorList()
-	{
-		List<Actor> t = new ArrayList<Actor>();
-		t.addAll(playerBullets);
-		t.addAll(alienBullets);
-		t.addAll(playerShips);
-		t.addAll(alienShips);
-		return t;
+	{		
+		return allActorList;
 	}
 	
-	public List<Ship> getShips()
+	public int getAlienShipCount()
 	{
-		List<Ship> ships = new CopyOnWriteArrayList<Ship>(new ArrayList<Ship>());
-		ships.addAll(playerShips);
-		ships.addAll(alienShips);
-		return ships;
+		int alienShipCount = 0;
+		for(Actor a : allActorList)
+			if(a.getType() == Actor.ALIEN_SHIP)
+				alienShipCount++;
+		return alienShipCount;
 	}
 	
-	public List<Bullet> getBullets()
-	{
-		List<Bullet> bullets = new CopyOnWriteArrayList<Bullet>(new ArrayList<Bullet>());
-		bullets.addAll(playerBullets);
-		bullets.addAll(alienBullets);
-		return  bullets;
-	}
-	
-	public List<PlayerShip> getPlayerShips()
-	{
-		return playerShips;
-	}
-	
-	public List<AlienShip> getAlienShips()
-	{
-		return alienShips;
-	}
-	
-	public List<PlayerBullet> getPlayerBullets()
-	{
-		return playerBullets;
-	}
-	
-	public List<AlienBullet> getAlienBullets()
-	{
-		return alienBullets;
-	}
 }

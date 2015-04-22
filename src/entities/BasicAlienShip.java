@@ -94,7 +94,7 @@ public class BasicAlienShip extends AlienShip {
 		x -= speedX;
 		
 		if(gen.nextFloat() <= firingProbability)
-			actors.getAlienBullets().add(new AlienBullet(x, y + 10, 1 + speedX));
+			actors.getActorList().add(new AlienBullet(x, y + 10, 1 + speedX));
 		
 		return 0;
 	}

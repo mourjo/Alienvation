@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Random;
 
+import entities.Actor;
 import entities.BasicAlienShip;
 import entities.BasicPlayerShip;
 
@@ -24,23 +25,23 @@ public class ActorCreator {
 		return _singleton;
 	}
 	
-	public void createBasicPlayerShips(List<? super BasicPlayerShip> basicPlayerShips, int count)
+	public void createBasicPlayerShips(List<Actor> actors, int count)
 	{
 		Slice[][] slices = Simulator.getInstance().getSlices();
 		
 		for(int i = 0; i < count; i++)
-			basicPlayerShips.add(new BasicPlayerShip(slices[gen.nextInt(slices.length)][gen.nextInt(slices[0].length)]));
+			actors.add(new BasicPlayerShip(slices[gen.nextInt(slices.length)][gen.nextInt(slices[0].length)]));
 	}
 	
-	public void createBasicPlayerShip(List<? super BasicPlayerShip> basicPlayerShips, int x, int y, Slice s)
+	public void createBasicPlayerShip(List<Actor> actors, int x, int y, Slice s)
 	{
-		basicPlayerShips.add(new BasicPlayerShip(x, y, s));
+		actors.add(new BasicPlayerShip(x, y, s));
 	}
 	
-	public void createBasicAlienShip(List<? super BasicAlienShip> basicAlienShips, int count)
+	public void createBasicAlienShip(List<Actor> actors, int count)
 	{
 		Simulator simulator = Simulator.getInstance();
 		for(int i = 0; i < simulator.getHeight(); i += (simulator.getHeight())/count)
-			basicAlienShips.add(new BasicAlienShip(simulator.getWidth(), (i + gen.nextInt(40))%(simulator.getHeight()-20)));
+			actors.add(new BasicAlienShip(simulator.getWidth(), (i + gen.nextInt(40))%(simulator.getHeight()-20)));
 	}
 }
