@@ -67,11 +67,6 @@ public class BasicPlayerShip extends PlayerShip {
 
 	@Override
 	public int act(ActorSet actors) {
-//		if(slice == null)
-//		{
-//			System.out.println(slice);
-//			return -1;
-//		}
 		if(x >= Math.min(slice.getX() + slice.getWidth(), Simulator.getInstance().getWidth()) || x <= slice.getX())
 				x = (int) (gen.nextInt((int)slice.getWidth()) + slice.getX());
 		

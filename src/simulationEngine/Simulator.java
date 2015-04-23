@@ -1,6 +1,5 @@
 package simulationEngine;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,24 +8,15 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import entities.Actor;
-import entities.AlienBullet;
-import entities.AlienShip;
 import entities.BasicPlayerShip;
 import entities.Bullet;
-import entities.PlayerBullet;
-import entities.PlayerShip;
 import entities.Ship;
 
 public class Simulator extends JPanel {
@@ -45,6 +35,7 @@ public class Simulator extends JPanel {
 	final int frames = 24;
 	private int numSlices = 4;
 	private Slice slices[][];
+	private boolean exitCondition;
 
 	private List<Point> stars;
 
@@ -55,6 +46,27 @@ public class Simulator extends JPanel {
 		actorFactory = ActorCreator.getInstance();
 		gen = new Random();
 		slices = new Slice[numSlices][numSlices];
+		exitCondition = false;
+	}
+	
+	public void start()
+	{
+		while(!exitCondition)
+		{
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			repaint();
+			refresh();
+			
+		}
+	}
+	
+	public void exit()
+	{
+		exitCondition = true;
 	}
 
 	@Override
@@ -188,8 +200,10 @@ public class Simulator extends JPanel {
 		if(!paused)
 		{
 			for(Actor actor : actors.getActorList())
+			{
+				actor.unPause();
 				actor.act(actors);
-
+			}
 			cleanUp(actors);
 
 		}

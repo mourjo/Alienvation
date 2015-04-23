@@ -1,27 +1,17 @@
 package simulationEngine;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
-import entities.Actor;
 
 public class Launcher extends JFrame {
 
@@ -64,50 +54,21 @@ public class Launcher extends JFrame {
 				if(simulator.isInitialized())
 				{
 					Point pt = m.getPoint();
-					System.out.println((int)pt.getX() + ", " + ((int)pt.getY()-50));
 					if(((int)pt.getY()-50) >= 0)
 						simulator.createPlayerShip(-1, (int)pt.getX(), (int)pt.getY()-50);
-//					if(simulator.getSize().height == 548)
-					System.out.println(simulator.getSize());
-						simulator.setSize(simulator.getSize());
 				}
 			}
 
 			});
 		
-		
-//		addComponentListener(new ComponentAdapter(){
-//
-//			@Override
-//			public void componentResized(ComponentEvent ev) {
-//				setSize(((Component)ev.getSource()).getSize());
-//			}
-//			
-//		});
-		
-		
-		
-		
-//		setSize(560, 400);
 		setVisible(true);
 		setLocationRelativeTo(null);		
 		
-		simulator.init(960, 600);
-//		Container contentPane = getContentPane();
-//		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 0,90));
+		simulator.init(954, 548);
 		add(simulator);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		System.out.println(simulator.getSize());
-//		simulator.setSize(new Dimension(960,600));
-//		pack();
 	}
-	
-//	@Override
-//	public void setSize(Dimension d)
-//	{
-//		super.setSize(d);
-//		simulator.setSize(getComponents()[0].getSize());
-//	}
 	
 	void buildMenus()
 	{
@@ -119,6 +80,7 @@ public class Launcher extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Launcher.this.dispose();
+				simulator.exit();
 				System.exit(0);
 				
 			}});
@@ -160,15 +122,7 @@ public class Launcher extends JFrame {
 	
 	public void launch() throws InterruptedException
 	{
-		while(true)
-		{
-			Thread.sleep(15);
-//			System.out.println(simulator.getSize());
-			simulator.repaint();
-//			System.out.println(simulator.getSize());
-			simulator.refresh();
-			
-		}
+		simulator.start();
 	}
 	
 	public static void main(String args[]) throws InterruptedException
@@ -186,10 +140,7 @@ public class Launcher extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			System.out.println(simulator.getSize());
 			simulator.setNumberOfSlices(cross);
-//			System.out.println(simulator.getSize());
-			
 		}
 		
 	}

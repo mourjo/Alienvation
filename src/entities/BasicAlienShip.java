@@ -16,8 +16,10 @@ public class BasicAlienShip extends AlienShip {
 	
 	static{
 		try {
+//			image1 = ImageIO.read(AlienShip.class.getResource("/spaceship4.png"));
 			image1 = ImageIO.read(AlienShip.class.getResource("/alienShip3.png"));
 			image2 = ImageIO.read(AlienShip.class.getResource("/alienShip4.png"));
+//			image2 = ImageIO.read(AlienShip.class.getResource("/spaceship5.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,13 +39,6 @@ public class BasicAlienShip extends AlienShip {
 		image = image1;
 		changeColorInterval = gen.nextInt(30) + gen.nextInt(50);
 		
-//		if(image1 == null)
-//			try {
-//				image1 = ImageIO.read(getClass().getResource("/alienShip3.png"));
-//				image2 = ImageIO.read(getClass().getResource("/alienShip4.png"));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
 	}
 	
 	public BasicAlienShip(int x, int y)
