@@ -74,7 +74,6 @@ public class Simulator extends JPanel {
 		stars = new ArrayList<Point>();
 		for (int i = 0; i < 500; i++)
 			stars.add(new Point(gen.nextInt((int)d.getWidth())*2, gen.nextInt((int)d.getHeight())*2));
-
 	}
 
 	public boolean isInitialized()

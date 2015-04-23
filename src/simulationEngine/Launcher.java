@@ -1,7 +1,10 @@
 package simulationEngine;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,13 +28,14 @@ public class Launcher extends JFrame {
 	private static final long serialVersionUID = 5859915989867575984L;
 	Simulator simulator;
 	boolean init = false;
+	
 	Launcher(String name)
 	{
 		super(name);
 		setResizable(false);
 		setSize(960, 600);
 		buildMenus();
-		
+		simulator = Simulator.getInstance();
 		
 		
 		addKeyListener(new KeyAdapter(){
@@ -63,7 +67,8 @@ public class Launcher extends JFrame {
 					System.out.println((int)pt.getX() + ", " + ((int)pt.getY()-50));
 					if(((int)pt.getY()-50) >= 0)
 						simulator.createPlayerShip(-1, (int)pt.getX(), (int)pt.getY()-50);
-					if(simulator.getSize().height == 548)
+//					if(simulator.getSize().height == 548)
+					System.out.println(simulator.getSize());
 						simulator.setSize(simulator.getSize());
 				}
 			}
@@ -81,14 +86,20 @@ public class Launcher extends JFrame {
 //		});
 		
 		
-		simulator = Simulator.getInstance();
+		
 		
 //		setSize(560, 400);
 		setVisible(true);
 		setLocationRelativeTo(null);		
-		simulator.init(getComponents()[0].getWidth(), getComponents()[0].getHeight());
+		
+		simulator.init(960, 600);
+//		Container contentPane = getContentPane();
+//		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 0,90));
 		add(simulator);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		System.out.println(simulator.getSize());
+//		simulator.setSize(new Dimension(960,600));
+//		pack();
 	}
 	
 //	@Override
@@ -152,7 +163,9 @@ public class Launcher extends JFrame {
 		while(true)
 		{
 			Thread.sleep(15);
+//			System.out.println(simulator.getSize());
 			simulator.repaint();
+//			System.out.println(simulator.getSize());
 			simulator.refresh();
 			
 		}
